@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/text_light_21sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingLeft="112dp"
+        android:text="@string/you_been_in_peace_for" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="31dp">
+
+        <TextView
+            style="@style/text_regular_bold_45sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="3dp"
+            android:text="172" />
+
+        <TextView
+            style="@style/text_condensed_bold_45sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="@string/minutes" />
+    </LinearLayout>
+
+    <TextView
+        style="@style/text_light_16sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingLeft="112dp"
+        android:text="@string/your_record_peace_of_mind" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="62.5dp">
+
+        <TextView
+            style="@style/text_regular_bold_27sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="3dp"
+            android:text="325" />
+
+        <TextView
+            style="@style/text_condensed_bold_27sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="@dimen/clock_padding"
+            android:text="@string/minutes" />
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/blue">
+
+            <TextView
+                style="@style/text_condensed_bold_italic_18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:drawablePadding="@dimen/clock_padding"
+                android:drawableRight="@drawable/share_icon"
+                android:gravity="left"
+                android:padding="5dp"
+                android:text="@string/share" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

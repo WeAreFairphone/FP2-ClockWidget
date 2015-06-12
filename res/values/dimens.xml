@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+
+    <!-- Analog clock size in the the screen saver -->
+    <dimen name="big_font_size">120dp</dimen>
+    <dimen name="widget_big_font_size">106sp</dimen>
+    <dimen name="text_size_21sp">21sp</dimen>
+    <dimen name="text_size_93sp">93sp</dimen>
+    <dimen name="text_size_53sp">53sp</dimen>
+    <dimen name="text_size_20sp">20sp</dimen>
+    <dimen name="text_size_34sp">34sp</dimen>
+    <dimen name="text_size_67sp">67sp</dimen>
+    <dimen name="text_size_45sp">45sp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_27sp">27sp</dimen>
+    <dimen name="text_size_18sp">18sp</dimen>
+    <dimen name="clock_padding">8dp</dimen>
+
+
+
+</resources>

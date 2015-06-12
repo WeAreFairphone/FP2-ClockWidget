@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <string name="app_name">Clock widget</string>
+    <string name="dummy_content">Please add the clock widget to the home screen.</string>
+    <string name="big_clock_12_hours_format" translatable="false">h:mm</string>
+    <string name="big_clock_24_hours_format" translatable="false">HH:mm</string>
+    <string name="month_format" translatable="false">MMMM</string>
+    <string name="year_format" translatable="false">yyyy</string>
+    <string name="day_name_format" translatable="false">EEEE</string>
+    <string name="day_number_format" translatable="false">d</string>
+    <string name="am_pm_format" translatable="false">a</string>
+
+    <string name="you_been_in_peace_for">You\'ve been in\npeace of mind for</string>
+    <string name="your_record_peace_of_mind">Your record\npeace of mind was</string>
+    <string name="minutes">minutes</string>
+    <string name="share">share</string>
+</resources>
