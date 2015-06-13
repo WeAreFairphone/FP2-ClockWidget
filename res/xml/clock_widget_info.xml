@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/clock_widget_peace_of_mind"
+    android:initialLayout="@layout/clock_widget_main"
     android:minHeight="200dp"
     android:minWidth="300dp"
     android:previewImage="@mipmap/ic_clock_launcher"

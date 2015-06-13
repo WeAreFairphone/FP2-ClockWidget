@@ -22,8 +22,9 @@ public class ClockWidget extends AppWidgetProvider {
     public void onEnabled(Context context) {
         super.onEnabled(context);
 
-        //mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_main);
-        mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_peace_of_mind);
+        mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_main);
+        //mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_peace_of_mind);
+        new RemoteViews(context.getPackageName(), R.layout.clock_widget_peace_of_mind);
         mContext = context;
 
         updateBoard();
