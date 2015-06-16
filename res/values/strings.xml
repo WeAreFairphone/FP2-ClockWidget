@@ -14,4 +14,6 @@
     <string name="your_record_peace_of_mind">Your record\npeace of mind was</string>
     <string name="minutes">minutes</string>
     <string name="share">share</string>
+    <string name="battery_charge_will_last_until">Battery charge will last until</string>
+    <string name="make_it_last_longer">MAKE IT LAST LONGER</string>
 </resources>

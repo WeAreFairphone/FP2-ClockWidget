@@ -14,6 +14,7 @@
     <dimen name="text_size_16sp">16sp</dimen>
     <dimen name="text_size_27sp">27sp</dimen>
     <dimen name="text_size_18sp">18sp</dimen>
+    <dimen name="text_size_37sp">37sp</dimen>
     <dimen name="clock_padding">8dp</dimen>
 
 

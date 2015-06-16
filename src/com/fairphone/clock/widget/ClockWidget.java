@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.widget.RemoteViews;
 
@@ -14,7 +15,7 @@ import com.fairphone.clock.R;
 public class ClockWidget extends AppWidgetProvider {
 
     private static final String TAG = ClockWidget.class.getSimpleName();
-    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.layout.clock_widget_main, R.layout.clock_widget_peace_of_mind};
+    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.layout.clock_widget_main, R.layout.clock_widget_peace_of_mind, R.layout.clock_widget_battery};
 
     private static int CURRENT_LAYOUT = 0;
 
@@ -34,6 +35,7 @@ public class ClockWidget extends AppWidgetProvider {
 
         mWidget = new RemoteViews(context.getPackageName(), CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++)%CLOCK_WIDGET_LAYOUTS.length]);
         mContext = context;
+        //DateFormat.is24HourFormat(mContext);
 
         Log.i(TAG, "onUpdate()");
         updateBoard();

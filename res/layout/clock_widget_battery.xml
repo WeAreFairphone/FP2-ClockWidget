@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/text_light_21sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:paddingLeft="31dp"
+        android:text="@string/battery_charge_will_last_until" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="31dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/battery_10"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            style="@style/text_condensed_bold_67sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="17"
+            android:paddingLeft="14.67dp" />
+
+        <TextView
+            style="@style/text_light_67sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:paddingRight="3dp"
+            android:paddingLeft="3dp"
+            android:text=":" />
+
+        <TextView
+            style="@style/text_condensed_bold_67sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="25" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="10dp">
+
+            <TextView
+                style="@style/text_condensed_bold_21sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="TODAY"
+                android:layout_gravity="left"
+                android:paddingTop="10dp" />
+
+            <TextClock
+                style="@style/text_thin_37sp_alpha"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="@string/am_pm_format"
+                android:format24Hour="@string/am_pm_format"
+                android:includeFontPadding="false"
+                android:layout_gravity="left"
+                android:gravity="left"
+                android:layout_marginTop="-8dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        style="@style/text_condensed_bold_italic_18sp"
+        android:layout_width="200dp"
+        android:layout_height="32dp"
+        android:gravity="left"
+        android:padding="5dp"
+        android:text="@string/make_it_last_longer"
+        android:layout_gravity="right" />
+
+</LinearLayout>

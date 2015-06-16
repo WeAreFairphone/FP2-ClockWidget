@@ -65,21 +65,15 @@
             android:paddingRight="@dimen/clock_padding"
             android:text="@string/minutes" />
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/blue">
-
-            <TextView
-                style="@style/text_condensed_bold_italic_18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="32dp"
-                android:drawablePadding="@dimen/clock_padding"
-                android:drawableRight="@drawable/share_icon"
-                android:gravity="left"
-                android:padding="5dp"
-                android:text="@string/share" />
-        </FrameLayout>
+        <TextView
+            style="@style/text_condensed_bold_italic_18sp"
+            android:layout_width="wrap_content"
+            android:layout_height="32dp"
+            android:drawablePadding="@dimen/clock_padding"
+            android:drawableRight="@drawable/share_icon"
+            android:gravity="left"
+            android:padding="5dp"
+            android:text="@string/share" />
 
     </LinearLayout>
 

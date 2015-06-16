@@ -155,11 +155,23 @@
 
     <style name="text_regular_67sp" parent="text_white_67sp">
         <item name="android:fontFamily">sans-serif</item>
-        <item name="android:textStyle">bold</item>
     </style>
 
     <style name="text_regular_bold_67sp" parent="text_regular_67sp">
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_condensed_67sp" parent="text_white_67sp">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="text_condensed_bold_67sp" parent="text_condensed_67sp">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_light_67sp" parent="text_white_67sp">
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:alpha">0.5</item>
     </style>
 
     <style name="text_white_45sp">
@@ -228,6 +240,29 @@
 
     <style name="text_condensed_bold_italic_18sp" parent="text_condensed_18sp">
         <item name="android:textStyle">bold|italic</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="text_condensed_21sp" parent="text_white_21sp">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="text_condensed_bold_21sp" parent="text_condensed_21sp">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="text_white_37sp">
+        <item name="android:textSize">@dimen/text_size_37sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="text_thin_37sp" parent="text_white_37sp">
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="text_thin_37sp_alpha" parent="text_thin_37sp">
+        <item name="android:alpha">0.5</item>
         <item name="android:textAllCaps">true</item>
     </style>
 
