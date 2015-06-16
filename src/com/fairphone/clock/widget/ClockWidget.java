@@ -14,6 +14,9 @@ import com.fairphone.clock.R;
 public class ClockWidget extends AppWidgetProvider {
 
     private static final String TAG = ClockWidget.class.getSimpleName();
+    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.layout.clock_widget_main, R.layout.clock_widget_peace_of_mind};
+
+    private static int CURRENT_LAYOUT = 0;
 
     private RemoteViews mWidget;
     private Context mContext;
@@ -21,20 +24,15 @@ public class ClockWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
         super.onEnabled(context);
-
-        mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_main);
-        //mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_peace_of_mind);
-        new RemoteViews(context.getPackageName(), R.layout.clock_widget_peace_of_mind);
         mContext = context;
-
         updateBoard();
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         super.onUpdate(context, appWidgetManager, appWidgetIds);
-        //mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_main);
-        mWidget = new RemoteViews(context.getPackageName(), R.layout.clock_widget_peace_of_mind);
+
+        mWidget = new RemoteViews(context.getPackageName(), CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++)%CLOCK_WIDGET_LAYOUTS.length]);
         mContext = context;
 
         Log.i(TAG, "onUpdate()");

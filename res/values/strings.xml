@@ -3,7 +3,7 @@
     <string name="app_name">Clock widget</string>
     <string name="dummy_content">Please add the clock widget to the home screen.</string>
     <string name="big_clock_12_hours_format" translatable="false">h:mm</string>
-    <string name="big_clock_24_hours_format" translatable="false">HH:mm</string>
+    <string name="big_clock_24_hours_format" translatable="false">kk:mm</string>
     <string name="month_format" translatable="false">MMMM</string>
     <string name="year_format" translatable="false">yyyy</string>
     <string name="day_name_format" translatable="false">EEEE</string>

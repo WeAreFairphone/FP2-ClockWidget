@@ -16,7 +16,5 @@ public class CentralActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         finish();
-
-        setContentView(R.layout.activity_central);
     }
 }
