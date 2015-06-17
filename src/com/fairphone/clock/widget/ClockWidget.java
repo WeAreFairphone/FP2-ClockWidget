@@ -5,6 +5,8 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -47,15 +49,14 @@ public class ClockWidget extends AppWidgetProvider {
     private void setupView(Context context, RemoteViews mainWidgetView) {
         int active_layout = CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++) % CLOCK_WIDGET_LAYOUTS.length];
         mainWidgetView.setViewVisibility(active_layout, View.VISIBLE);
-        setupActiveView(mainWidgetView, active_layout);
+        setupActiveView(context, mainWidgetView, active_layout);
         setupWidgetOnClick(context, mainWidgetView, active_layout);
     }
 
-    private void setupActiveView(RemoteViews mainWidgetView, int active_layout) {
+    private void setupActiveView(Context context, RemoteViews mainWidgetView, int active_layout) {
         switch (active_layout){
             case R.id.clock_widget_main:
-                String nextAlarm = "6:45";
-                mainWidgetView.setTextViewText(R.id.alarm_text, nextAlarm);
+                setNextScheduledAlarm(context, mainWidgetView);
                 break;
             case R.id.clock_widget_peace_of_mind:
                 break;
@@ -72,5 +73,18 @@ public class ClockWidget extends AppWidgetProvider {
         Intent launchIntent = new Intent(ClockScreenService.ACTION_ROTATE_VIEW);
         PendingIntent launchPendingIntent = PendingIntent.getBroadcast(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(viewId, launchPendingIntent);
+    }
+
+    private void setNextScheduledAlarm(Context context, RemoteViews mainWidgetView)
+    {
+        String nextAlarm = Settings.System.getString(context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
+
+        if(TextUtils.isEmpty(nextAlarm)) {
+            mainWidgetView.setViewVisibility(R.id.alarm_text, View.GONE);
+        } else {
+            mainWidgetView.setTextViewText(R.id.alarm_text, nextAlarm);
+            mainWidgetView.setViewVisibility(R.id.alarm_text, View.VISIBLE);
+        }
+
     }
 }
