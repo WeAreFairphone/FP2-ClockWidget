@@ -89,10 +89,11 @@
             android:text="@string/days" />
 
         <TextView
-            android:id="@+id/share_button"
+            android:id="@+id/yours_since_share_button"
             style="@style/text_condensed_bold_italic_18sp"
             android:layout_width="wrap_content"
             android:layout_height="32dp"
+            android:background="@drawable/button_states_blue"
             android:drawablePadding="@dimen/clock_padding"
             android:drawableRight="@drawable/share_icon"
             android:gravity="left"

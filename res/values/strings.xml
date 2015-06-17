@@ -9,6 +9,8 @@
     <string name="day_name_format" translatable="false">EEEE</string>
     <string name="day_number_format" translatable="false">d</string>
     <string name="am_pm_format" translatable="false">a</string>
+    <string name="alarm_clock_12h_format" translatable="false">EEE, h:mm a</string>
+    <string name="alarm_clock_24h_format" translatable="false">EEE, kk:mm</string>
 
     <string name="you_been_in_peace_for">You\'ve been in\npeace of mind for</string>
     <string name="your_record_peace_of_mind">Your record\npeace of mind was</string>

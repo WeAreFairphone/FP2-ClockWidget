@@ -14,7 +14,8 @@
         android:drawableLeft="@drawable/alarm_icon"
         android:drawablePadding="4dp"
         android:gravity="left"
-        android:visibility="gone"/>
+        android:textAllCaps="true"
+        android:visibility="gone" />
 
     <LinearLayout
         android:layout_width="match_parent"
