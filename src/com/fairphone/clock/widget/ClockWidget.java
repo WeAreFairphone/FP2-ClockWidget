@@ -3,64 +3,59 @@ package com.fairphone.clock.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.View;
 import android.widget.RemoteViews;
 
+import com.fairphone.clock.ClockScreenService;
 import com.fairphone.clock.R;
+
+import java.security.SecureRandom;
 
 public class ClockWidget extends AppWidgetProvider {
 
     private static final String TAG = ClockWidget.class.getSimpleName();
-    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.layout.clock_widget_main, R.layout.clock_widget_peace_of_mind, R.layout.clock_widget_battery};
 
+    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery};
     private static int CURRENT_LAYOUT = 0;
 
-    private RemoteViews mWidget;
-    private Context mContext;
+    private static final SecureRandom r = new SecureRandom();
+
 
     @Override
-    public void onEnabled(Context context) {
+    public void onEnabled(Context context)
+    {
         super.onEnabled(context);
-        mContext = context;
-        updateBoard();
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.wtf(TAG, "onUpdate()");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
-        mWidget = new RemoteViews(context.getPackageName(), CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++)%CLOCK_WIDGET_LAYOUTS.length]);
-        mContext = context;
-        //DateFormat.is24HourFormat(mContext);
+        context.startService(new Intent(context, ClockScreenService.class));
 
-        Log.i(TAG, "onUpdate()");
-        updateBoard();
+        RemoteViews mainWidgetView = new RemoteViews(context.getPackageName(), R.layout.widget_main);
+        setupView(context, mainWidgetView);
+
+        appWidgetManager.updateAppWidget(appWidgetIds, null);
+        appWidgetManager.updateAppWidget(appWidgetIds, mainWidgetView);
     }
 
-    private void updateBoard() {
+    private void setupView(Context context, RemoteViews mainWidgetView) {
+        Log.wtf(TAG, "idx "+CURRENT_LAYOUT);
+        int active_layout = CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++) % CLOCK_WIDGET_LAYOUTS.length];
+        Log.wtf(TAG, "id "+active_layout);
+        mainWidgetView.setViewVisibility(active_layout, View.VISIBLE);
 
-
-        int code = 0;
-        setupButtonClickIntents(mContext, code, mWidget);
-
-        ComponentName widget = new ComponentName(mContext, ClockWidget.class);
-        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-        appWidgetManager.updateAppWidget(widget, null);
-        appWidgetManager.updateAppWidget(widget, mWidget);
-
+        setupWidgetOnClick(context, mainWidgetView, active_layout);
     }
 
-    private int setupButtonClickIntents(Context context, int code, RemoteViews widget) {
-        // set up the all apps intent
-        Intent launchIntent = new Intent();
-        launchIntent.setAction("blalala");
-
-        PendingIntent launchPendingIntent = PendingIntent.getBroadcast(context, code++, launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        return code;
+    private void setupWidgetOnClick(Context context, RemoteViews widget, int viewId) {
+        Intent launchIntent = new Intent(ClockScreenService.ACTION_ROTATE_VIEW);
+        PendingIntent launchPendingIntent = PendingIntent.getBroadcast(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        widget.setOnClickPendingIntent(viewId, launchPendingIntent);
     }
 }
