@@ -47,7 +47,25 @@ public class ClockWidget extends AppWidgetProvider {
     private void setupView(Context context, RemoteViews mainWidgetView) {
         int active_layout = CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++) % CLOCK_WIDGET_LAYOUTS.length];
         mainWidgetView.setViewVisibility(active_layout, View.VISIBLE);
+        setupActiveView(mainWidgetView, active_layout);
         setupWidgetOnClick(context, mainWidgetView, active_layout);
+    }
+
+    private void setupActiveView(RemoteViews mainWidgetView, int active_layout) {
+        switch (active_layout){
+            case R.id.clock_widget_main:
+                String nextAlarm = "6:45";
+                mainWidgetView.setTextViewText(R.id.alarm_text, nextAlarm);
+                break;
+            case R.id.clock_widget_peace_of_mind:
+                break;
+            case R.id.clock_widget_battery:
+                break;
+            case R.id.clock_widget_yours_since:
+                break;
+            default:
+                Log.wtf(TAG, "Unknow layout: " + active_layout);
+        }
     }
 
     private void setupWidgetOnClick(Context context, RemoteViews widget, int viewId) {
