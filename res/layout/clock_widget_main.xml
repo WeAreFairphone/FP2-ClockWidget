@@ -7,7 +7,7 @@
     android:paddingLeft="31dp">
 
     <TextView
-        android:id="@+id/nextAlarm"
+        android:id="@+id/alarm_text"
         style="@style/text_regular_21sp_spacing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
