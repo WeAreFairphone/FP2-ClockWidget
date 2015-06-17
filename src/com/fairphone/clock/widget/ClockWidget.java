@@ -18,7 +18,7 @@ public class ClockWidget extends AppWidgetProvider {
 
     private static final String TAG = ClockWidget.class.getSimpleName();
 
-    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery};
+    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery, R.id.clock_widget_yours_since};
     private static int CURRENT_LAYOUT = 0;
 
     private static final SecureRandom r = new SecureRandom();
@@ -45,11 +45,8 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private void setupView(Context context, RemoteViews mainWidgetView) {
-        Log.wtf(TAG, "idx "+CURRENT_LAYOUT);
         int active_layout = CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++) % CLOCK_WIDGET_LAYOUTS.length];
-        Log.wtf(TAG, "id "+active_layout);
         mainWidgetView.setViewVisibility(active_layout, View.VISIBLE);
-
         setupWidgetOnClick(context, mainWidgetView, active_layout);
     }
 

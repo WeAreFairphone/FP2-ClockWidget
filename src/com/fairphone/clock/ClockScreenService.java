@@ -40,8 +40,6 @@ public class ClockScreenService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		Log.wtf(TAG, "onBind");
-		// TODO: Return the communication channel to the service.
 		throw new UnsupportedOperationException("Not yet implemented");
 	}
 
