@@ -101,7 +101,7 @@ public class ClockWidget extends AppWidgetProvider {
         String nextAlarm = getNextAlarm(context);
 
         if(TextUtils.isEmpty(nextAlarm)) {
-            widget.setViewVisibility(R.id.alarm_text, View.GONE);
+            widget.setViewVisibility(R.id.alarm_text, View.INVISIBLE);
         } else {
             widget.setTextViewText(R.id.alarm_text, nextAlarm);
             widget.setViewVisibility(R.id.alarm_text, View.VISIBLE);
