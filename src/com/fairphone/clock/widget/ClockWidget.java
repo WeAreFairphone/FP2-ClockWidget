@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
 import android.provider.Settings;
@@ -26,7 +27,6 @@ public class ClockWidget extends AppWidgetProvider {
     private static final String TAG = ClockWidget.class.getSimpleName();
 
     public static final int[] CLOCK_WIDGET_LAYOUTS = { R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery, R.id.clock_widget_yours_since};
-    private static int CURRENT_LAYOUT = 0;
 
     private static final SecureRandom r = new SecureRandom();
 
@@ -52,25 +52,33 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private void setupView(Context context, RemoteViews mainWidgetView) {
-        int active_layout = CLOCK_WIDGET_LAYOUTS[(CURRENT_LAYOUT++) % CLOCK_WIDGET_LAYOUTS.length];
+        SharedPreferences sharedPrefs = context.getSharedPreferences(ClockScreenService.FAIRPHONE_CLOCK_PREFERENCES, Context.MODE_PRIVATE);
+        int active_layout = getActiveLayout(sharedPrefs);
         mainWidgetView.setViewVisibility(active_layout, View.VISIBLE);
-        setupActiveView(context, mainWidgetView, active_layout);
+        setupActiveView(context, mainWidgetView, active_layout, sharedPrefs);
         setupWidgetOnClick(context, mainWidgetView, active_layout);
     }
 
-    private void setupActiveView(Context context, RemoteViews widget, int active_layout) {
+    public static int getActiveLayout(SharedPreferences sharedPrefs) {
+        int currentLayout = sharedPrefs.getInt(ClockScreenService.PREFERENCE_ACTIVE_LAYOUT, 0);
+        return CLOCK_WIDGET_LAYOUTS[(currentLayout) % CLOCK_WIDGET_LAYOUTS.length];
+    }
+
+    private void setupActiveView(Context context, RemoteViews widget, int active_layout, SharedPreferences sharedPrefs) {
         switch (active_layout){
             case R.id.clock_widget_main:
                 setNextScheduledAlarm(context, widget);
                 break;
             case R.id.clock_widget_peace_of_mind:
-                setupShareOnClick(context, widget, active_layout, R.id.peace_share_button);
+                setupShareOnClick(context, widget, R.id.peace_share_button);
                 break;
             case R.id.clock_widget_battery:
+                int batteryLevel = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_LEVEL, 0);
+                showBatteryLevel(widget, batteryLevel);
                 setupLastLongerOnClick(context, widget);
                 break;
             case R.id.clock_widget_yours_since:
-                setupShareOnClick(context, widget, active_layout, R.id.yours_since_share_button);
+                setupShareOnClick(context, widget, R.id.yours_since_share_button);
                 break;
             default:
                 Log.wtf(TAG, "Unknow layout: " + active_layout);
@@ -83,9 +91,8 @@ public class ClockWidget extends AppWidgetProvider {
         widget.setOnClickPendingIntent(R.id.last_longer_button, launchPendingIntent);
     }
 
-    private void setupShareOnClick(Context context, RemoteViews widget, int active_layout, int shareButtonId) {
+    private void setupShareOnClick(Context context, RemoteViews widget, int shareButtonId) {
         Intent launchIntent = new Intent(ClockScreenService.ACTION_SHARE);
-        launchIntent.putExtra(ClockScreenService.EXTRA_CURRENT_LAYOUT_ID, active_layout);
         PendingIntent launchPendingIntent = PendingIntent.getBroadcast(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(shareButtonId, launchPendingIntent);
     }
@@ -126,5 +133,30 @@ public class ClockWidget extends AppWidgetProvider {
             nextAlarm = Settings.System.getString(context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
         }
         return nextAlarm;
+    }
+
+    private void showBatteryLevel(RemoteViews widget, int batteryLevel) {
+
+        if (batteryLevel <= 10) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_10);
+        } else if (batteryLevel <= 20) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_20);
+        } else if (batteryLevel <= 30) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_30);
+        } else if (batteryLevel <= 40) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_40);
+        } else if (batteryLevel <= 50) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_50);
+        } else if (batteryLevel <= 60) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_60);
+        } else if (batteryLevel <= 70) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_70);
+        } else if (batteryLevel <= 80) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_80);
+        } else if (batteryLevel <= 90) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_90);
+        } else if (batteryLevel <= 100) {
+            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_100);
+        }
     }
 }
