@@ -110,7 +110,7 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private String getNextAlarm(Context context) {
-        String nextAlarm;
+        String nextAlarm = "";
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
             SimpleDateFormat sdf;
@@ -119,7 +119,9 @@ public class ClockWidget extends AppWidgetProvider {
             }else {
                 sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_12h_format));
             }
-            nextAlarm = sdf.format(am.getNextAlarmClock().getTriggerTime());
+            if(am != null && am.getNextAlarmClock() != null) {
+                nextAlarm = sdf.format(am.getNextAlarmClock().getTriggerTime());
+            }
         } else {
             nextAlarm = Settings.System.getString(context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
         }

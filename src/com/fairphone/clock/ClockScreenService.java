@@ -56,7 +56,7 @@ public class ClockScreenService extends Service {
 			mBatterySaverReceiver = new BroadcastReceiver() {
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					Toast.makeText(context, "Jump to battery saver setting page", Toast.LENGTH_SHORT).show();
+					startActivity(new Intent(Intent.ACTION_POWER_USAGE_SUMMARY).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 				}
 			};
 			registerReceiver(mBatterySaverReceiver, new IntentFilter(ACTION_BATTERY_SAVER));
