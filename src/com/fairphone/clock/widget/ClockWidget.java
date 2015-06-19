@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
@@ -74,7 +75,8 @@ public class ClockWidget extends AppWidgetProvider {
                 break;
             case R.id.clock_widget_battery:
                 int batteryLevel = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_LEVEL, 0);
-                showBatteryLevel(widget, batteryLevel);
+                int batteryStatus = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_STATUS, 0);
+                updateBatteryStatusAndLevel(context, widget, batteryLevel, batteryStatus);
                 setupLastLongerOnClick(context, widget);
                 break;
             case R.id.clock_widget_yours_since:
@@ -135,28 +137,78 @@ public class ClockWidget extends AppWidgetProvider {
         return nextAlarm;
     }
 
-    private void showBatteryLevel(RemoteViews widget, int batteryLevel) {
+    private void updateBatteryLevel(RemoteViews widget, int level) {
 
-        if (batteryLevel <= 10) {
+        if (level <= 10) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_10);
-        } else if (batteryLevel <= 20) {
+        } else if (level <= 20) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_20);
-        } else if (batteryLevel <= 30) {
+        } else if (level <= 30) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_30);
-        } else if (batteryLevel <= 40) {
+        } else if (level <= 40) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_40);
-        } else if (batteryLevel <= 50) {
+        } else if (level <= 50) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_50);
-        } else if (batteryLevel <= 60) {
+        } else if (level <= 60) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_60);
-        } else if (batteryLevel <= 70) {
+        } else if (level <= 70) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_70);
-        } else if (batteryLevel <= 80) {
+        } else if (level <= 80) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_80);
-        } else if (batteryLevel <= 90) {
+        } else if (level <= 90) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_90);
-        } else if (batteryLevel <= 100) {
+        } else if (level <= 100) {
             widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_100);
         }
+    }
+
+    private void updateBatteryStatusAndLevel(Context context, RemoteViews widget, int level, int status) {
+
+        Resources resources = context.getResources();
+        switch (status) {
+            case BatteryManager.BATTERY_STATUS_CHARGING:
+                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_will_be_charged_at));
+                widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_charging);
+                widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
+                break;
+            case BatteryManager.BATTERY_STATUS_FULL:
+                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_is_fully_charged));
+                widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_100);
+                widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
+                break;
+            case BatteryManager.BATTERY_STATUS_DISCHARGING:
+            case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
+            case BatteryManager.BATTERY_STATUS_UNKNOWN:
+            default:
+                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_charge_will_last_until));
+                updateBatteryLevel(widget, level);
+                widget.setViewVisibility(R.id.last_longer_button, View.VISIBLE);
+                break;
+        }
+    }
+
+    public static String getBatteryStatusAsString(int status){
+        String desc = "Uknown: ";
+        switch (status) {
+            case BatteryManager.BATTERY_STATUS_CHARGING:
+                desc = "BATTERY_STATUS_CHARGING";
+                break;
+            case BatteryManager.BATTERY_STATUS_FULL:
+                desc = "BATTERY_STATUS_FULL";
+                break;
+            case BatteryManager.BATTERY_STATUS_DISCHARGING:
+                desc = "BATTERY_STATUS_DISCHARGING";
+                break;
+            case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
+                desc = "BATTERY_STATUS_NOT_CHARGING";
+                break;
+            case BatteryManager.BATTERY_STATUS_UNKNOWN:
+                desc = "BATTERY_STATUS_UNKNOWN";
+                break;
+            default:
+                desc += status;
+                break;
+        }
+        return desc;
     }
 }

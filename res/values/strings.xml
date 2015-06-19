@@ -17,6 +17,8 @@
     <string name="minutes">minutes</string>
     <string name="share">share</string>
     <string name="battery_charge_will_last_until">Battery charge will last until</string>
+    <string name="battery_will_be_charged_at">Battery will be charged at</string>
+    <string name="battery_is_fully_charged">Battery is fully charged</string>
     <string name="make_it_last_longer">Make it last longer</string>
     <string name="your_fairphone_for">Your Fairphone for</string>
     <string name="years">years</string>

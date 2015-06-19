@@ -14,6 +14,7 @@ import android.os.BatteryManager;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.fairphone.clock.widget.ClockWidget;
 
@@ -27,6 +28,7 @@ public class ClockScreenService extends Service {
 	public static final String FAIRPHONE_CLOCK_PREFERENCES = "com.fairphone.clock.FAIRPHONE_CLOCK_PREFERENCES";
 	public static final String PREFERENCE_BATTERY_LEVEL = "com.fairphone.clock.PREFERENCE_BATTERY_LEVEL";
 	public static final String PREFERENCE_ACTIVE_LAYOUT = "com.fairphone.clock.PREFERENCE_ACTIVE_LAYOUT";
+	public static final String PREFERENCE_BATTERY_STATUS = "com.fairphone.clock.PREFERENCE_BATTERY_STATUS";
 
 	private BroadcastReceiver mRotateReceiver;
 	private BroadcastReceiver mShareReceiver;
@@ -85,7 +87,7 @@ public class ClockScreenService extends Service {
 				@Override
 				public void onReceive(Context context, Intent intent) {
 					if (intent != null && Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-						updateBatteryLevelPreference(intent);
+						updateBatteryPreferences(intent);
 						//only update if the current layout is the battery information
 						if(ClockWidget.getActiveLayout(mSharedPreferences) == R.id.clock_widget_battery) {
 							updateWidget();
@@ -106,11 +108,15 @@ public class ClockScreenService extends Service {
 		}
 	}
 
-	private void updateBatteryLevelPreference(Intent intent) {
+	private void updateBatteryPreferences(Intent intent) {
+
 		int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
-		//int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, 0);
-		Log.wtf(TAG, "Battery Level: " + level);
+		int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
+		int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+		Log.wtf(TAG, "Battery Level: " + level + "\nBattery Status: " + ClockWidget.getBatteryStatusAsString(status) + "\nBattery Scale: " + scale);
+		//Toast.makeText(getApplicationContext(), "Battery Status: " + ClockWidget.getBatteryStatusAsString(status),Toast.LENGTH_SHORT).show();
 		saveIntPreference(PREFERENCE_BATTERY_LEVEL, level);
+		saveIntPreference(PREFERENCE_BATTERY_STATUS, status);
 	}
 
 	private void saveIntPreference(String preference, int value) {
