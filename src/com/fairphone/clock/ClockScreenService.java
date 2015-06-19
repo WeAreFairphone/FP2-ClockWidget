@@ -1,5 +1,7 @@
 package com.fairphone.clock;
 
+import android.app.Activity;
+import android.app.KeyguardManager;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -21,7 +23,6 @@ public class ClockScreenService extends Service {
 
 	public static final String ACTION_ROTATE_VIEW = "com.fairphone.clock.ACTION_ROTATE_VIEW";
 	public static final String ACTION_SHARE = "com.fairphone.clock.ACTION_SHARE";
-	public static final String EXTRA_CURRENT_LAYOUT_ID = "com.fairphone.clock.EXTRA_CURRENT_LAYOUT_ID";
 	public static final String ACTION_BATTERY_SAVER = "com.fairphone.clock.ACTION_BATTERY_SAVER";
 	public static final String FAIRPHONE_CLOCK_PREFERENCES = "com.fairphone.clock.FAIRPHONE_CLOCK_PREFERENCES";
 	public static final String PREFERENCE_BATTERY_LEVEL = "com.fairphone.clock.PREFERENCE_BATTERY_LEVEL";
@@ -72,6 +73,7 @@ public class ClockScreenService extends Service {
 			mBatterySaverReceiver = new BroadcastReceiver() {
 				@Override
 				public void onReceive(Context context, Intent intent) {
+					dismissKeyguard();
 					startActivity(new Intent(Intent.ACTION_POWER_USAGE_SUMMARY).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 				}
 			};
@@ -84,7 +86,6 @@ public class ClockScreenService extends Service {
 				public void onReceive(Context context, Intent intent) {
 					if (intent != null && Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
 						updateBatteryLevelPreference(intent);
-
 						//only update if the current layout is the battery information
 						if(ClockWidget.getActiveLayout(mSharedPreferences) == R.id.clock_widget_battery) {
 							updateWidget();
@@ -93,6 +94,15 @@ public class ClockScreenService extends Service {
 				}
 			};
 			registerReceiver(mBatteryStatsReceiver, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
+		}
+	}
+
+	private void dismissKeyguard() {
+		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
+		Log.wtf(TAG, "IS LOCKED? "+ keyguardManager.isKeyguardLocked());
+		if (keyguardManager.isKeyguardLocked()) {
+			KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
+			lock.disableKeyguard();
 		}
 	}
 
@@ -136,6 +146,7 @@ public class ClockScreenService extends Service {
 						sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
 						sendIntent = Intent.createChooser(sendIntent, "Share to");
 						sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+						dismissKeyguard();
 						startActivity(sendIntent);
 					}
 				}
