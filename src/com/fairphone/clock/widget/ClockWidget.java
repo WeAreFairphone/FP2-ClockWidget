@@ -83,7 +83,7 @@ public class ClockWidget extends AppWidgetProvider {
                 setupLastLongerOnClick(context, widget);
                 break;
             case R.id.clock_widget_yours_since:
-                setYourFairphoneSince(context, widget, sharedPrefs.getLong(ClockScreenService.PREFERENCE_YOUR_FAIRPHONE_SINCE, 0));
+                setYourFairphoneSince(context, widget, sharedPrefs.getLong(ClockScreenService.PREFERENCE_YOUR_FAIRPHONE_SINCE, 0L));
                 setupShareOnClick(context, widget, R.id.yours_since_share_button);
                 break;
             default:
@@ -231,6 +231,9 @@ public class ClockWidget extends AppWidgetProvider {
     private void setYourFairphoneSince(Context context, RemoteViews widget, long startTime) {
 
         Resources resources = context.getResources();
+        if(startTime == 0L){
+            startTime = System.currentTimeMillis();
+        }
         Period pp = new Period(startTime, System.currentTimeMillis());
 
         Log.wtf(TAG, "Yours since: " + PeriodFormat.getDefault().print(pp));
