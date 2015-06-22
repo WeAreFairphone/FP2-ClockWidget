@@ -236,7 +236,7 @@ public class ClockWidget extends AppWidgetProvider {
         }
         Period pp = new Period(startTime, System.currentTimeMillis());
 
-        Log.wtf(TAG, "Yours since: " + PeriodFormat.getDefault().print(pp));
+        //Log.wtf(TAG, "Yours since: " + PeriodFormat.getDefault().print(pp));
         int diffYears = pp.getYears();
         int diffMonths = pp.getMonths();
         int diffDays = ((pp.getWeeks() * 7) + pp.getDays());
