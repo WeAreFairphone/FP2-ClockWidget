@@ -117,9 +117,9 @@ public class ClockScreenService extends Service {
 				@Override
 				public void onReceive(Context context, Intent intent) {
 					if (intent != null && Intent.ACTION_BATTERY_CHANGED.equals(intent.getAction())) {
-						updateBatteryPreferences(intent);
+						boolean batteryStatsChanged = updateBatteryPreferences(intent);
 						//only update if the current layout is the battery information
-						if(ClockWidget.getActiveLayout(mSharedPreferences) == R.id.clock_widget_battery) {
+						if(ClockWidget.getActiveLayout(mSharedPreferences) == R.id.clock_widget_battery && batteryStatsChanged) {
 							updateWidget();
 						}
 					}
@@ -131,22 +131,29 @@ public class ClockScreenService extends Service {
 
 	private void dismissKeyguard() {
 		KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
-		Log.wtf(TAG, "IS LOCKED? "+ keyguardManager.isKeyguardLocked());
+		Log.wtf(TAG, "IS LOCKED? " + keyguardManager.isKeyguardLocked());
 		if (keyguardManager.isKeyguardLocked()) {
 			KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
 			lock.disableKeyguard();
 		}
 	}
 
-	private void updateBatteryPreferences(Intent intent) {
-
+	private boolean updateBatteryPreferences(Intent intent) {
+		boolean batteryChanged = false;
+		int currentLevel = mSharedPreferences.getInt(PREFERENCE_BATTERY_LEVEL, 0);
+		int currentStatus = mSharedPreferences.getInt(PREFERENCE_BATTERY_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
 		int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
 		int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
-		int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-		Log.wtf(TAG, "Battery Level: " + level + "\nBattery Status: " + ClockWidget.getBatteryStatusAsString(status) + "\nBattery Scale: " + scale);
-		//Toast.makeText(getApplicationContext(), "Battery Status: " + ClockWidget.getBatteryStatusAsString(status),Toast.LENGTH_SHORT).show();
-		saveIntPreference(PREFERENCE_BATTERY_LEVEL, level);
-		saveIntPreference(PREFERENCE_BATTERY_STATUS, status);
+		if(currentLevel != level || currentStatus != status) {
+			int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+			Log.wtf(TAG, "Battery Level: " + level + "\nBattery Status: " + ClockWidget.getBatteryStatusAsString(status) + "\nBattery Scale: " + scale);
+			//Toast.makeText(getApplicationContext(), "Battery Status: " + ClockWidget.getBatteryStatusAsString(status),Toast.LENGTH_SHORT).show();
+			saveIntPreference(PREFERENCE_BATTERY_LEVEL, level);
+			saveIntPreference(PREFERENCE_BATTERY_STATUS, status);
+			batteryChanged = true;
+		}
+
+		return batteryChanged;
 	}
 
 	private void saveIntPreference(String preference, int value) {
