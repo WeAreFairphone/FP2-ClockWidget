@@ -177,12 +177,16 @@ public class ClockWidget extends AppWidgetProvider {
             case BatteryManager.BATTERY_STATUS_CHARGING:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_will_be_charged_at));
                 widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_charging);
+                widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
+                widget.setViewVisibility(R.id.charged_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
                 break;
             case BatteryManager.BATTERY_STATUS_FULL:
-                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_is_fully_charged));
+                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_is_fully));
                 widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_100);
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
+                widget.setViewVisibility(R.id.battery_time_group, View.GONE);
+                widget.setViewVisibility(R.id.charged_text, View.VISIBLE);
                 break;
             case BatteryManager.BATTERY_STATUS_DISCHARGING:
             case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
@@ -190,6 +194,8 @@ public class ClockWidget extends AppWidgetProvider {
             default:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_charge_will_last_until));
                 updateBatteryLevel(widget, level);
+                widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
+                widget.setViewVisibility(R.id.charged_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.VISIBLE);
                 break;
         }
