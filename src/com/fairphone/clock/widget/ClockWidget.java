@@ -71,6 +71,7 @@ public class ClockWidget extends AppWidgetProvider {
                 setNextScheduledAlarm(context, widget);
                 break;
             case R.id.clock_widget_peace_of_mind:
+                setupPeaceOfMind(context, widget, sharedPrefs);
                 setupShareOnClick(context, widget, R.id.peace_share_button);
                 break;
             case R.id.clock_widget_battery:
@@ -97,6 +98,13 @@ public class ClockWidget extends AppWidgetProvider {
         Intent launchIntent = new Intent(ClockScreenService.ACTION_SHARE);
         PendingIntent launchPendingIntent = PendingIntent.getBroadcast(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(shareButtonId, launchPendingIntent);
+    }
+
+    private void setupPeaceOfMind(Context context, RemoteViews widget, SharedPreferences sharedPrefs) {
+        long pom_current = sharedPrefs.getLong(ClockScreenService.PREFERENCE_POM_CURRENT, 0L);
+        long pom_record = sharedPrefs.getLong(ClockScreenService.PREFERENCE_POM_RECORD, 0L);
+        widget.setTextViewText(R.id.text_pom_current, Long.toString(pom_current));
+        widget.setTextViewText(R.id.text_pom_record, Long.toString(pom_record));
     }
 
     private void setupWidgetOnClick(Context context, RemoteViews widget, int viewId) {

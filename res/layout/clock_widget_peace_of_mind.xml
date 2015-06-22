@@ -20,12 +20,12 @@
         android:paddingLeft="31dp">
 
         <TextView
+            android:id="@+id/text_pom_current"
             style="@style/text_regular_bold_45sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
-            android:paddingRight="3dp"
-            android:text="172" />
+            android:paddingRight="3dp" />
 
         <TextView
             style="@style/text_condensed_bold_45sp"
@@ -50,12 +50,13 @@
         android:paddingLeft="62.5dp">
 
         <TextView
+            android:id="@+id/text_pom_record"
             style="@style/text_regular_bold_27sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingRight="3dp"
-            android:text="325" />
+            />
 
         <TextView
             style="@style/text_condensed_bold_27sp"

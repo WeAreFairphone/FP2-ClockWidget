@@ -29,13 +29,17 @@ public class ClockScreenService extends Service {
 	public static final String PREFERENCE_BATTERY_LEVEL = "com.fairphone.clock.PREFERENCE_BATTERY_LEVEL";
 	public static final String PREFERENCE_ACTIVE_LAYOUT = "com.fairphone.clock.PREFERENCE_ACTIVE_LAYOUT";
 	public static final String PREFERENCE_BATTERY_STATUS = "com.fairphone.clock.PREFERENCE_BATTERY_STATUS";
+	public static final String PREFERENCE_POM_CURRENT = "com.fairphone.clock.PREFERENCE_POM_CURRENT";
+	public static final String PREFERENCE_POM_RECORD = "com.fairphone.clock.PREFERENCE_POM_RECORD";
 
 	private BroadcastReceiver mRotateReceiver;
 	private BroadcastReceiver mShareReceiver;
 	private BroadcastReceiver mBatterySaverReceiver;
 	private BroadcastReceiver mBatteryStatsReceiver;
 	private SharedPreferences mSharedPreferences;
+	private BroadcastReceiver mLockReceiver;
 	private static int CURRENT_LAYOUT = 0;
+	private long mScreenOffTimestamp = -1;
 
 
 	@Override
@@ -48,8 +52,34 @@ public class ClockScreenService extends Service {
 		setupLayoutRotateReceiver();
 		setupShareReceiver();
 		setupBatterySaverReceiver();
+		setupLockReceiver();
 
 		return START_STICKY;
+	}
+
+	private void setupLockReceiver() {
+		if (mLockReceiver == null) {
+			mLockReceiver = new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+						mScreenOffTimestamp = System.currentTimeMillis();
+					} else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
+						if (mScreenOffTimestamp != -1){
+							long pomInMinutes = (System.currentTimeMillis() - mScreenOffTimestamp) / 60000L;
+							long pomRecord = mSharedPreferences.getLong(PREFERENCE_POM_RECORD, 0);
+							if (pomInMinutes > pomRecord) {
+								pomRecord = pomInMinutes;
+							}
+							mSharedPreferences.edit().putLong(PREFERENCE_POM_CURRENT,pomInMinutes).putLong(PREFERENCE_POM_RECORD, pomRecord).apply();
+						}
+					}
+					updateWidget();
+				}
+			};
+			registerReceiver(mLockReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
+			registerReceiver(mLockReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+		}
 	}
 
 	private void setupLayoutRotateReceiver() {
@@ -139,8 +169,12 @@ public class ClockScreenService extends Service {
 					String shareText = null;
 					switch (active_layout) {
 						case R.id.clock_widget_peace_of_mind:
-							shareText = "I've been in peace of mind for 172 minutes!";
-//							shareText = "I've been in peace of mind for 325 minutes! A new personal record!";
+							long pom_current = mSharedPreferences.getLong(PREFERENCE_POM_CURRENT, 0);
+							long pom_record = mSharedPreferences.getLong(PREFERENCE_POM_RECORD,0);
+							shareText = "I've been in peace of mind for "+pom_current+" minutes!";
+							if (pom_current == pom_record) {
+								shareText += " A new personal best!";
+							}
 							break;
 						case R.id.clock_widget_yours_since:
 							shareText = "My Fairphone is 2 years, 7 months, and 15 days old!";
@@ -163,7 +197,7 @@ public class ClockScreenService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return null;
 	}
 
 	public void updateWidget()
