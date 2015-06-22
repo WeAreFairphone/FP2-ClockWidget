@@ -31,6 +31,7 @@ public class ClockScreenService extends Service {
 	public static final String PREFERENCE_BATTERY_STATUS = "com.fairphone.clock.PREFERENCE_BATTERY_STATUS";
 	public static final String PREFERENCE_POM_CURRENT = "com.fairphone.clock.PREFERENCE_POM_CURRENT";
 	public static final String PREFERENCE_POM_RECORD = "com.fairphone.clock.PREFERENCE_POM_RECORD";
+	public static final String PREFERENCE_YOUR_FAIRPHONE_SINCE = "com.fairphone.clock.PREFERENCE_YOUR_FAIRPHONE_SINCE";
 
 	private BroadcastReceiver mRotateReceiver;
 	private BroadcastReceiver mShareReceiver;
@@ -49,6 +50,7 @@ public class ClockScreenService extends Service {
 
 
 		mSharedPreferences = getSharedPreferences(FAIRPHONE_CLOCK_PREFERENCES, MODE_PRIVATE);
+		startYourFairphoneSinceCounter();
 		setupLayoutRotateReceiver();
 		setupShareReceiver();
 		setupBatterySaverReceiver();
@@ -217,4 +219,11 @@ public class ClockScreenService extends Service {
 		}
 	}
 
+	private void startYourFairphoneSinceCounter() {
+		if(mSharedPreferences.getLong(PREFERENCE_YOUR_FAIRPHONE_SINCE, 0) == 0){
+			SharedPreferences.Editor editor = mSharedPreferences.edit();
+			editor.putLong(PREFERENCE_YOUR_FAIRPHONE_SINCE, System.currentTimeMillis());
+			editor.commit();
+		}
+	}
 }

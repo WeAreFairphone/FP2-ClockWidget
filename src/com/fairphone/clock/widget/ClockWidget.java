@@ -20,6 +20,9 @@ import android.widget.RemoteViews;
 import com.fairphone.clock.ClockScreenService;
 import com.fairphone.clock.R;
 
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormat;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 
@@ -27,14 +30,13 @@ public class ClockWidget extends AppWidgetProvider {
 
     private static final String TAG = ClockWidget.class.getSimpleName();
 
-    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery, R.id.clock_widget_yours_since};
+    public static final int[] CLOCK_WIDGET_LAYOUTS = {R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery, R.id.clock_widget_yours_since};
 
     private static final SecureRandom r = new SecureRandom();
 
 
     @Override
-    public void onEnabled(Context context)
-    {
+    public void onEnabled(Context context) {
         super.onEnabled(context);
     }
 
@@ -66,7 +68,7 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private void setupActiveView(Context context, RemoteViews widget, int active_layout, SharedPreferences sharedPrefs) {
-        switch (active_layout){
+        switch (active_layout) {
             case R.id.clock_widget_main:
                 setNextScheduledAlarm(context, widget);
                 break;
@@ -81,6 +83,7 @@ public class ClockWidget extends AppWidgetProvider {
                 setupLastLongerOnClick(context, widget);
                 break;
             case R.id.clock_widget_yours_since:
+                setYourFairphoneSince(context, widget, sharedPrefs.getLong(ClockScreenService.PREFERENCE_YOUR_FAIRPHONE_SINCE, 0));
                 setupShareOnClick(context, widget, R.id.yours_since_share_button);
                 break;
             default:
@@ -113,11 +116,10 @@ public class ClockWidget extends AppWidgetProvider {
         widget.setOnClickPendingIntent(viewId, launchPendingIntent);
     }
 
-    private void setNextScheduledAlarm(Context context, RemoteViews widget)
-    {
+    private void setNextScheduledAlarm(Context context, RemoteViews widget) {
         String nextAlarm = getNextAlarm(context);
 
-        if(TextUtils.isEmpty(nextAlarm)) {
+        if (TextUtils.isEmpty(nextAlarm)) {
             widget.setViewVisibility(R.id.alarm_text, View.INVISIBLE);
         } else {
             widget.setTextViewText(R.id.alarm_text, nextAlarm);
@@ -128,15 +130,15 @@ public class ClockWidget extends AppWidgetProvider {
 
     private String getNextAlarm(Context context) {
         String nextAlarm = "";
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             SimpleDateFormat sdf;
-            if(DateFormat.is24HourFormat(context)) {
+            if (DateFormat.is24HourFormat(context)) {
                 sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_24h_format));
-            }else {
+            } else {
                 sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_12h_format));
             }
-            if(am != null && am.getNextAlarmClock() != null) {
+            if (am != null && am.getNextAlarmClock() != null) {
                 nextAlarm = sdf.format(am.getNextAlarmClock().getTriggerTime());
             }
         } else {
@@ -201,7 +203,7 @@ public class ClockWidget extends AppWidgetProvider {
         }
     }
 
-    public static String getBatteryStatusAsString(int status){
+    public static String getBatteryStatusAsString(int status) {
         String desc = "Uknown: ";
         switch (status) {
             case BatteryManager.BATTERY_STATUS_CHARGING:
@@ -225,4 +227,33 @@ public class ClockWidget extends AppWidgetProvider {
         }
         return desc;
     }
+
+    private void setYourFairphoneSince(Context context, RemoteViews widget, long startTime) {
+
+        Resources resources = context.getResources();
+        Period pp = new Period(startTime, System.currentTimeMillis());
+
+        Log.wtf(TAG, "Yours since: " + PeriodFormat.getDefault().print(pp));
+        int diffYears = pp.getYears();
+        int diffMonths = pp.getMonths();
+        int diffDays = ((pp.getWeeks() * 7) + pp.getDays());
+        int diffHours = pp.getHours();
+
+        if (pp.getYears() != 0) {
+            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffYears));
+            widget.setTextViewText(R.id.years_text, diffYears == 1 ? resources.getString(R.string.year) : resources.getString(R.string.years));
+            widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffMonths));
+            widget.setTextViewText(R.id.months_text, diffMonths == 1 ? resources.getString(R.string.month) : resources.getString(R.string.months));
+            widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffDays));
+            widget.setTextViewText(R.id.days_text, diffDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
+        } else {
+            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffMonths));
+            widget.setTextViewText(R.id.years_text, diffMonths == 1 ? resources.getString(R.string.month) : resources.getString(R.string.months));
+            widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffDays));
+            widget.setTextViewText(R.id.months_text, diffDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
+            widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffHours));
+            widget.setTextViewText(R.id.days_text, diffHours == 1 ? resources.getString(R.string.hour) : resources.getString(R.string.hours));
+        }
+    }
 }
+
