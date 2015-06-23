@@ -37,6 +37,9 @@ public class ClockScreenService extends Service {
     public static final String PREFERENCE_POM_CURRENT = "com.fairphone.clock.PREFERENCE_POM_CURRENT";
     public static final String PREFERENCE_POM_RECORD = "com.fairphone.clock.PREFERENCE_POM_RECORD";
     public static final String PREFERENCE_YOUR_FAIRPHONE_SINCE = "com.fairphone.clock.PREFERENCE_YOUR_FAIRPHONE_SINCE";
+    public static final String PREFERENCE_BATTERY_CHANGED_TIMESTAMP = "com.fairphone.clock.PREFERENCE_BATTERY_CHANGED_TIMESTAMP";
+    public static final String PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED = "com.fairphone.clock.PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED";
+    public static final String PREFERENCE_BATTERY_TIME_UNTIL_CHARGED = "com.fairphone.clock.PREFERENCE_BATTERY_TIME_UNTIL_CHARGED";
 
     private BroadcastReceiver mRotateReceiver;
     private BroadcastReceiver mShareReceiver;
@@ -51,8 +54,7 @@ public class ClockScreenService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         super.onStartCommand(intent, flags, startId);
-        Log.wtf(TAG, "onStartCommand");
-
+        Log.d(TAG, "onStartCommand");
 
         mSharedPreferences = getSharedPreferences(FAIRPHONE_CLOCK_PREFERENCES, MODE_PRIVATE);
         startYourFairphoneSinceCounter();
@@ -138,7 +140,6 @@ public class ClockScreenService extends Service {
 
     private void dismissKeyguard() {
         KeyguardManager keyguardManager = (KeyguardManager) getSystemService(Activity.KEYGUARD_SERVICE);
-        Log.wtf(TAG, "IS LOCKED? " + keyguardManager.isKeyguardLocked());
         if (keyguardManager.isKeyguardLocked()) {
             KeyguardManager.KeyguardLock lock = keyguardManager.newKeyguardLock(KEYGUARD_SERVICE);
             lock.disableKeyguard();
@@ -153,11 +154,18 @@ public class ClockScreenService extends Service {
         int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
         if (currentLevel != level || currentStatus != status) {
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
-            Log.wtf(TAG, "Battery Level: " + level + "\nBattery Status: " + ClockWidget.getBatteryStatusAsString(status) + "\nBattery Scale: " + scale);
+            Log.d(TAG, "Battery Level: " + level + "\nBattery Status: " + ClockWidget.getBatteryStatusAsString(status) + "\nBattery Scale: " + scale);
             //Toast.makeText(getApplicationContext(), "Battery Status: " + ClockWidget.getBatteryStatusAsString(status),Toast.LENGTH_SHORT).show();
             saveIntPreference(PREFERENCE_BATTERY_LEVEL, level);
             saveIntPreference(PREFERENCE_BATTERY_STATUS, status);
             batteryChanged = true;
+            long lasttime = mSharedPreferences.getLong(PREFERENCE_BATTERY_CHANGED_TIMESTAMP, System.currentTimeMillis());
+            long now = System.currentTimeMillis();
+            long timeUntilCharge = (now - lasttime) * (scale - level);
+            long timeUntilDischarge = (now - lasttime) * (level);
+            saveLongPreference(PREFERENCE_BATTERY_CHANGED_TIMESTAMP, now);
+            saveLongPreference(PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED, timeUntilDischarge);
+            saveLongPreference(PREFERENCE_BATTERY_TIME_UNTIL_CHARGED, timeUntilCharge);
         }
 
         return batteryChanged;
@@ -201,7 +209,7 @@ public class ClockScreenService extends Service {
                             shareText += PeriodFormat.getDefault().withLocale(Locale.getDefault()).print(pp) + " old!";
                             break;
                         default:
-                            Log.wtf(TAG, "Unknown Share button: " + active_layout);
+                            Log.w(TAG, "Unknown Share button: " + active_layout);
                     }
                     if (!TextUtils.isEmpty(shareText)) {
                         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);

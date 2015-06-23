@@ -88,14 +88,13 @@
                     android:paddingTop="10dp"
                     android:text="TODAY" />
 
-                <TextClock
+                <TextView
+                    android:id="@+id/battery_am_pm_indicator"
                     style="@style/text_thin_37sp_alpha"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
                     android:layout_marginTop="-8dp"
-                    android:format12Hour="@string/am_pm_format"
-                    android:format24Hour=""
                     android:gravity="left"
                     android:includeFontPadding="false" />
             </LinearLayout>
