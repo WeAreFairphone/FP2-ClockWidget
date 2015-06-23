@@ -19,7 +19,10 @@ import android.util.Log;
 import com.fairphone.clock.widget.ClockWidget;
 
 import org.joda.time.Period;
+import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormat;
+import org.joda.time.format.PeriodFormatter;
+import org.joda.time.format.PeriodFormatterBuilder;
 
 import java.util.Locale;
 
@@ -205,8 +208,8 @@ public class ClockScreenService extends Service {
                             if (startTime == 0L) {
                                 startTime = System.currentTimeMillis();
                             }
-                            Period pp = new Period(startTime, System.currentTimeMillis());
-                            shareText += PeriodFormat.getDefault().withLocale(Locale.getDefault()).print(pp) + " old!";
+                            Period pp = new Period(startTime, System.currentTimeMillis(), PeriodType.standard().withSecondsRemoved().withMillisRemoved());
+                            shareText += PeriodFormat.wordBased().print(pp) + " old!";
                             break;
                         default:
                             Log.w(TAG, "Unknown Share button: " + active_layout);

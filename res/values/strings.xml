@@ -30,5 +30,7 @@
     <string name="day">day</string>
     <string name="hours">hours</string>
     <string name="hour">hour</string>
+    <string name="weeks">weeks</string>
+    <string name="week">week</string>
 
 </resources>

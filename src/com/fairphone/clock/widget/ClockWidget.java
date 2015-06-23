@@ -265,7 +265,9 @@ public class ClockWidget extends AppWidgetProvider {
         //Log.d(TAG, "Yours since: " + PeriodFormat.getDefault().print(pp));
         int diffYears = pp.getYears();
         int diffMonths = pp.getMonths();
-        int diffDays = ((pp.getWeeks() * 7) + pp.getDays());
+        int diffWeeks = pp.getWeeks();
+        int diffDays = pp.getDays();
+        int diffMonthDays = ((pp.getWeeks() * 7) + pp.getDays());
         int diffHours = pp.getHours();
 
         if (pp.getYears() != 0) {
@@ -273,11 +275,18 @@ public class ClockWidget extends AppWidgetProvider {
             widget.setTextViewText(R.id.years_text, diffYears == 1 ? resources.getString(R.string.year) : resources.getString(R.string.years));
             widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffMonths));
             widget.setTextViewText(R.id.months_text, diffMonths == 1 ? resources.getString(R.string.month) : resources.getString(R.string.months));
+            widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffMonthDays));
+            widget.setTextViewText(R.id.days_text, diffMonthDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
+        } else if (pp.getMonths() != 0) {
+            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffMonths));
+            widget.setTextViewText(R.id.years_text, diffMonths == 1 ? resources.getString(R.string.month) : resources.getString(R.string.months));
+            widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffWeeks));
+            widget.setTextViewText(R.id.months_text, diffWeeks == 1 ? resources.getString(R.string.week) : resources.getString(R.string.weeks));
             widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffDays));
             widget.setTextViewText(R.id.days_text, diffDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
         } else {
-            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffMonths));
-            widget.setTextViewText(R.id.years_text, diffMonths == 1 ? resources.getString(R.string.month) : resources.getString(R.string.months));
+            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffWeeks));
+            widget.setTextViewText(R.id.years_text, diffWeeks == 1 ? resources.getString(R.string.week) : resources.getString(R.string.weeks));
             widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffDays));
             widget.setTextViewText(R.id.months_text, diffDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
             widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffHours));
