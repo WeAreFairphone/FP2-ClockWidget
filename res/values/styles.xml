@@ -113,6 +113,10 @@
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
+    <style name="text_condensed_53sp" parent="text_white_53sp">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
     <style name="text_thin_53sp_spacing" parent="text_thin_53sp">
         <item name="android:alpha">0.5</item>
         <item name="android:textAllCaps">true</item>

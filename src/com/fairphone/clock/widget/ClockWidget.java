@@ -20,29 +20,38 @@ import android.widget.RemoteViews;
 import com.fairphone.clock.ClockScreenService;
 import com.fairphone.clock.R;
 
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeFieldType;
+import org.joda.time.DateTimeZone;
+import org.joda.time.Period;
+import org.joda.time.format.PeriodFormat;
+
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+import java.util.TimeZone;
+
 
 public class ClockWidget extends AppWidgetProvider {
 
     private static final String TAG = ClockWidget.class.getSimpleName();
 
-    public static final int[] CLOCK_WIDGET_LAYOUTS = { R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery, R.id.clock_widget_yours_since};
+    public static final int[] CLOCK_WIDGET_LAYOUTS = {R.id.clock_widget_main, R.id.clock_widget_peace_of_mind, R.id.clock_widget_battery, R.id.clock_widget_yours_since};
 
     private static final SecureRandom r = new SecureRandom();
 
     public static final String CLOCK_AM_PM_UPDATE = "com.fairphone.clock.widget.ClockWidget.CLOCK_AM_PM_UPDATE";
 
     @Override
-    public void onEnabled(Context context)
-    {
+    public void onEnabled(Context context) {
         super.onEnabled(context);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.wtf(TAG, "Update");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         context.startService(new Intent(context, ClockScreenService.class));
@@ -99,25 +108,30 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private void setupActiveView(Context context, RemoteViews widget, int active_layout, SharedPreferences sharedPrefs) {
-        switch (active_layout){
+        switch (active_layout) {
             case R.id.clock_widget_main:
                 setClockAmPm(context, widget);
                 setNextScheduledAlarm(context, widget);
                 break;
             case R.id.clock_widget_peace_of_mind:
+                setupPeaceOfMind(widget, sharedPrefs);
                 setupShareOnClick(context, widget, R.id.peace_share_button);
                 break;
             case R.id.clock_widget_battery:
                 int batteryLevel = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_LEVEL, 0);
                 int batteryStatus = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_STATUS, 0);
-                updateBatteryStatusAndLevel(context, widget, batteryLevel, batteryStatus);
+                long chargingTime = sharedPrefs.getLong(ClockScreenService.PREFERENCE_BATTERY_TIME_UNTIL_CHARGED, System.currentTimeMillis());
+                long remainingTime = sharedPrefs.getLong(ClockScreenService.PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED, System.currentTimeMillis());
+                updateBatteryStatusAndLevel(context, widget, batteryLevel, batteryStatus, remainingTime, chargingTime);
                 setupLastLongerOnClick(context, widget);
                 break;
             case R.id.clock_widget_yours_since:
+                setYourFairphoneSince(context, widget, sharedPrefs.getLong(ClockScreenService.PREFERENCE_YOUR_FAIRPHONE_SINCE, 0L));
                 setupShareOnClick(context, widget, R.id.yours_since_share_button);
                 break;
             default:
                 Log.wtf(TAG, "Unknown layout: " + active_layout);
+
         }
     }
 
@@ -133,12 +147,19 @@ public class ClockWidget extends AppWidgetProvider {
         widget.setOnClickPendingIntent(shareButtonId, launchPendingIntent);
     }
 
+    private void setupPeaceOfMind(RemoteViews widget, SharedPreferences sharedPrefs) {
+        long pom_current = sharedPrefs.getLong(ClockScreenService.PREFERENCE_POM_CURRENT, 0L);
+        long pom_record = sharedPrefs.getLong(ClockScreenService.PREFERENCE_POM_RECORD, 0L);
+        widget.setTextViewText(R.id.text_pom_current, Long.toString(pom_current));
+        widget.setTextViewText(R.id.text_pom_record, Long.toString(pom_record));
+    }
+
     private void setupWidgetOnClick(Context context, RemoteViews widget, int viewId) {
         Intent launchIntent = new Intent(ClockScreenService.ACTION_ROTATE_VIEW);
         PendingIntent launchPendingIntent = PendingIntent.getBroadcast(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(viewId, launchPendingIntent);
     }
-
+    
     private void setClockAmPm(Context context, RemoteViews widget)
     {
         Calendar currentCalendar = Calendar.getInstance();
@@ -156,7 +177,7 @@ public class ClockWidget extends AppWidgetProvider {
     {
         String nextAlarm = getNextAlarm(context);
 
-        if(TextUtils.isEmpty(nextAlarm)) {
+        if (TextUtils.isEmpty(nextAlarm)) {
             widget.setViewVisibility(R.id.alarm_text, View.INVISIBLE);
         } else {
             widget.setTextViewText(R.id.alarm_text, nextAlarm);
@@ -228,19 +249,25 @@ public class ClockWidget extends AppWidgetProvider {
         }
     }
 
-    private void updateBatteryStatusAndLevel(Context context, RemoteViews widget, int level, int status) {
+    private void updateBatteryStatusAndLevel(Context context, RemoteViews widget, int level, int status, long remainingTime, long chargingTime) {
 
         Resources resources = context.getResources();
         switch (status) {
             case BatteryManager.BATTERY_STATUS_CHARGING:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_will_be_charged_at));
                 widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_charging);
+                widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
+                widget.setViewVisibility(R.id.charged_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
+
+                getRemainingTime(context, widget, chargingTime);
                 break;
             case BatteryManager.BATTERY_STATUS_FULL:
-                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_is_fully_charged));
+                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_is_fully));
                 widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_100);
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
+                widget.setViewVisibility(R.id.battery_time_group, View.GONE);
+                widget.setViewVisibility(R.id.charged_text, View.VISIBLE);
                 break;
             case BatteryManager.BATTERY_STATUS_DISCHARGING:
             case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
@@ -248,12 +275,30 @@ public class ClockWidget extends AppWidgetProvider {
             default:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_charge_will_last_until));
                 updateBatteryLevel(widget, level);
+                widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
+                widget.setViewVisibility(R.id.charged_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.VISIBLE);
+
+                getRemainingTime(context, widget, remainingTime);
                 break;
         }
     }
 
-    public static String getBatteryStatusAsString(int status){
+    private void getRemainingTime(Context context, RemoteViews widget, long remainingTime) {
+        DateTime endtime = new DateTime();
+        endtime = endtime.plus(remainingTime);
+        Log.d(TAG, "endTIme: " + endtime.toString() + "\nRemaining time: " + PeriodFormat.getDefault().withLocale(Locale.getDefault()).print(new Period(remainingTime)));
+        widget.setTextViewText(R.id.minutes_text, String.format("%02d", endtime.getMinuteOfHour()));
+        if (DateFormat.is24HourFormat(context)) {
+            widget.setTextViewText(R.id.hours_text, String.format("%02d", endtime.getHourOfDay()));
+            widget.setTextViewText(R.id.battery_am_pm_indicator, "");
+        }else{
+            widget.setTextViewText(R.id.hours_text, String.format("%d", endtime.property(DateTimeFieldType.clockhourOfHalfday()).get()));
+            widget.setTextViewText(R.id.battery_am_pm_indicator, endtime.property(DateTimeFieldType.halfdayOfDay()).get() == 0?"AM":"PM");
+        }
+    }
+
+    public static String getBatteryStatusAsString(int status) {
         String desc = "Uknown: ";
         switch (status) {
             case BatteryManager.BATTERY_STATUS_CHARGING:
@@ -278,9 +323,51 @@ public class ClockWidget extends AppWidgetProvider {
         return desc;
     }
 
-    private PendingIntent createUpdateIntent(Context context){
+
+    private PendingIntent createUpdateIntent(Context context) {
         Intent intent = new Intent(CLOCK_AM_PM_UPDATE);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         return pendingIntent;
     }
+
+    private void setYourFairphoneSince(Context context, RemoteViews widget, long startTime) {
+
+        Resources resources = context.getResources();
+        if (startTime == 0L) {
+            startTime = System.currentTimeMillis();
+        }
+        Period pp = new Period(startTime, System.currentTimeMillis());
+
+        //Log.d(TAG, "Yours since: " + PeriodFormat.getDefault().print(pp));
+        int diffYears = pp.getYears();
+        int diffMonths = pp.getMonths();
+        int diffWeeks = pp.getWeeks();
+        int diffDays = pp.getDays();
+        int diffMonthDays = ((pp.getWeeks() * 7) + pp.getDays());
+        int diffHours = pp.getHours();
+
+        if (pp.getYears() != 0) {
+            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffYears));
+            widget.setTextViewText(R.id.years_text, diffYears == 1 ? resources.getString(R.string.year) : resources.getString(R.string.years));
+            widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffMonths));
+            widget.setTextViewText(R.id.months_text, diffMonths == 1 ? resources.getString(R.string.month) : resources.getString(R.string.months));
+            widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffMonthDays));
+            widget.setTextViewText(R.id.days_text, diffMonthDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
+        } else if (pp.getMonths() != 0) {
+            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffMonths));
+            widget.setTextViewText(R.id.years_text, diffMonths == 1 ? resources.getString(R.string.month) : resources.getString(R.string.months));
+            widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffWeeks));
+            widget.setTextViewText(R.id.months_text, diffWeeks == 1 ? resources.getString(R.string.week) : resources.getString(R.string.weeks));
+            widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffDays));
+            widget.setTextViewText(R.id.days_text, diffDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
+        } else {
+            widget.setTextViewText(R.id.eleapsed_years_text, String.format("%02d", diffWeeks));
+            widget.setTextViewText(R.id.years_text, diffWeeks == 1 ? resources.getString(R.string.week) : resources.getString(R.string.weeks));
+            widget.setTextViewText(R.id.eleapsed_months_text, String.format("%02d", diffDays));
+            widget.setTextViewText(R.id.months_text, diffDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days));
+            widget.setTextViewText(R.id.eleapsed_days_text, String.format("%02d", diffHours));
+            widget.setTextViewText(R.id.days_text, diffHours == 1 ? resources.getString(R.string.hour) : resources.getString(R.string.hours));
+        }
+    }
 }
+

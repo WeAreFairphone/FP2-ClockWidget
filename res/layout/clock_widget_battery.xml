@@ -29,58 +29,75 @@
             android:src="@drawable/battery_10" />
 
         <TextView
-            android:id="@+id/hours_text"
-            style="@style/text_condensed_bold_67sp"
+            android:id="@+id/charged_text"
+            style="@style/text_condensed_53sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:paddingLeft="14.67dp"
-            android:text="17" />
-
-        <TextView
-            style="@style/text_light_67sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text=":" />
-
-        <TextView
-            android:id="@+id/minutes_text"
-            style="@style/text_condensed_bold_67sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="left"
-            android:text="25" />
+            android:text="@string/charged"
+            android:textAllCaps="true"
+            android:visibility="gone" />
 
         <LinearLayout
+            android:id="@+id/battery_time_group"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:orientation="vertical"
-            android:paddingLeft="10dp">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/date_text"
-                style="@style/text_condensed_bold_21sp"
+                android:id="@+id/hours_text"
+                style="@style/text_condensed_bold_67sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
                 android:gravity="left"
-                android:paddingTop="10dp"
-                android:text="TODAY" />
+                android:paddingLeft="14.67dp"
+                android:text="17" />
 
-            <TextClock
-                style="@style/text_thin_37sp_alpha"
+            <TextView
+                style="@style/text_light_67sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="-8dp"
-                android:format12Hour="@string/am_pm_format"
-                android:format24Hour=""
                 android:gravity="left"
-                android:includeFontPadding="false" />
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text=":" />
+
+            <TextView
+                android:id="@+id/minutes_text"
+                style="@style/text_condensed_bold_67sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:text="25" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="10dp">
+
+                <TextView
+                    android:id="@+id/date_text"
+                    style="@style/text_condensed_bold_21sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:gravity="left"
+                    android:paddingTop="10dp"
+                    android:text="TODAY" />
+
+                <TextView
+                    android:id="@+id/battery_am_pm_indicator"
+                    style="@style/text_thin_37sp_alpha"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="-8dp"
+                    android:gravity="left"
+                    android:includeFontPadding="false" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
