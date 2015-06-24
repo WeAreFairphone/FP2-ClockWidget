@@ -22,6 +22,7 @@ import com.fairphone.clock.R;
 
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class ClockWidget extends AppWidgetProvider {
 
@@ -31,6 +32,7 @@ public class ClockWidget extends AppWidgetProvider {
 
     private static final SecureRandom r = new SecureRandom();
 
+    public static final String CLOCK_AM_PM_UPDATE = "com.fairphone.clock.widget.ClockWidget.CLOCK_AM_PM_UPDATE";
 
     @Override
     public void onEnabled(Context context)
@@ -40,16 +42,47 @@ public class ClockWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.wtf(TAG, "onUpdate()");
+        Log.wtf(TAG, "Update");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         context.startService(new Intent(context, ClockScreenService.class));
 
         RemoteViews mainWidgetView = new RemoteViews(context.getPackageName(), R.layout.widget_main);
         setupView(context, mainWidgetView);
+        setupAmPmManager(context);
 
         appWidgetManager.updateAppWidget(appWidgetIds, null);
         appWidgetManager.updateAppWidget(appWidgetIds, mainWidgetView);
+
+
+
+
+    }
+
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
+        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(createUpdateIntent(context));
+    }
+
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
+        if(CLOCK_AM_PM_UPDATE.equals(intent.getAction())) {
+            context.startService(new Intent(context, ClockScreenService.class));
+        }
+    }
+
+    private void setupAmPmManager(Context context)
+    {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.MINUTE, 60-calendar.get(Calendar.MINUTE));
+        calendar.add(Calendar.SECOND, 60-calendar.get(Calendar.SECOND));
+
+        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 3600000, createUpdateIntent(context));
     }
 
     private void setupView(Context context, RemoteViews mainWidgetView) {
@@ -68,6 +101,7 @@ public class ClockWidget extends AppWidgetProvider {
     private void setupActiveView(Context context, RemoteViews widget, int active_layout, SharedPreferences sharedPrefs) {
         switch (active_layout){
             case R.id.clock_widget_main:
+                setClockAmPm(context, widget);
                 setNextScheduledAlarm(context, widget);
                 break;
             case R.id.clock_widget_peace_of_mind:
@@ -83,7 +117,7 @@ public class ClockWidget extends AppWidgetProvider {
                 setupShareOnClick(context, widget, R.id.yours_since_share_button);
                 break;
             default:
-                Log.wtf(TAG, "Unknow layout: " + active_layout);
+                Log.wtf(TAG, "Unknown layout: " + active_layout);
         }
     }
 
@@ -105,6 +139,19 @@ public class ClockWidget extends AppWidgetProvider {
         widget.setOnClickPendingIntent(viewId, launchPendingIntent);
     }
 
+    private void setClockAmPm(Context context, RemoteViews widget)
+    {
+        Calendar currentCalendar = Calendar.getInstance();
+        int hour = currentCalendar.get(Calendar.HOUR_OF_DAY);
+
+        if (hour < 12) {
+            widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_am_default));
+        }
+        else{
+            widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_pm_default));
+        }
+    }
+
     private void setNextScheduledAlarm(Context context, RemoteViews widget)
     {
         String nextAlarm = getNextAlarm(context);
@@ -120,18 +167,37 @@ public class ClockWidget extends AppWidgetProvider {
 
     private String getNextAlarm(Context context) {
         String nextAlarm = "";
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+        {
             AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-            SimpleDateFormat sdf;
-            if(DateFormat.is24HourFormat(context)) {
-                sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_24h_format));
-            }else {
-                sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_12h_format));
+            if(am != null && am.getNextAlarmClock() != null)
+            {
+                String amPmMarker = "";
+                SimpleDateFormat sdf;
+                boolean is24hFormat = DateFormat.is24HourFormat(context);
+                long alarmTriggerTime = am.getNextAlarmClock().getTriggerTime();
+
+                if(is24hFormat)
+                {
+                    sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_24h_format));
+                }else
+                {
+                    sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_12h_format));
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTimeInMillis(alarmTriggerTime);
+
+                    if(cal.get(Calendar.HOUR_OF_DAY) < 12)
+                    {
+                        amPmMarker = " " + context.getResources().getString(R.string.time_am_default);
+                    }else{
+                        amPmMarker = " " + context.getResources().getString(R.string.time_pm_default);
+                    }
+                }
+                nextAlarm = sdf.format(am.getNextAlarmClock().getTriggerTime()) + amPmMarker;
             }
-            if(am != null && am.getNextAlarmClock() != null) {
-                nextAlarm = sdf.format(am.getNextAlarmClock().getTriggerTime());
-            }
-        } else {
+        }
+        else
+        {
             nextAlarm = Settings.System.getString(context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
         }
         return nextAlarm;
@@ -210,5 +276,11 @@ public class ClockWidget extends AppWidgetProvider {
                 break;
         }
         return desc;
+    }
+
+    private PendingIntent createUpdateIntent(Context context){
+        Intent intent = new Intent(CLOCK_AM_PM_UPDATE);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
     }
 }

@@ -30,6 +30,8 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.fairphone.clock.widget.ClockWidget.CLOCK_AM_PM_UPDATE" />
+                <action android:name="android.intent.action.ALARM_CHANGED" />
             </intent-filter>
             <!-- This specifies the widget provider info -->
             <meta-data

@@ -14,9 +14,13 @@ import android.os.BatteryManager;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.fairphone.clock.widget.ClockWidget;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class ClockScreenService extends Service {
 
@@ -29,12 +33,15 @@ public class ClockScreenService extends Service {
 	public static final String PREFERENCE_BATTERY_LEVEL = "com.fairphone.clock.PREFERENCE_BATTERY_LEVEL";
 	public static final String PREFERENCE_ACTIVE_LAYOUT = "com.fairphone.clock.PREFERENCE_ACTIVE_LAYOUT";
 	public static final String PREFERENCE_BATTERY_STATUS = "com.fairphone.clock.PREFERENCE_BATTERY_STATUS";
+	public static final String ACTION_ALARM_CHANGED = "android.intent.action.ALARM_CHANGED";
 
 	private BroadcastReceiver mRotateReceiver;
 	private BroadcastReceiver mShareReceiver;
 	private BroadcastReceiver mBatterySaverReceiver;
 	private BroadcastReceiver mBatteryStatsReceiver;
 	private SharedPreferences mSharedPreferences;
+	private BroadcastReceiver mAmPmCheckReceiver;
+	private BroadcastReceiver mAlarmChangedReceiver;
 	private static int CURRENT_LAYOUT = 0;
 
 
@@ -43,13 +50,52 @@ public class ClockScreenService extends Service {
 		super.onStartCommand(intent, flags, startId);
 		Log.wtf(TAG, "onStartCommand");
 
-
 		mSharedPreferences = getSharedPreferences(FAIRPHONE_CLOCK_PREFERENCES, MODE_PRIVATE);
 		setupLayoutRotateReceiver();
 		setupShareReceiver();
 		setupBatterySaverReceiver();
+		setupAMPMReceiver();
+		setupAlarmChangeReceiver();
 
 		return START_STICKY;
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		Log.wtf(TAG, "destroy");
+		if (mAlarmChangedReceiver != null) {
+			Log.wtf(TAG, "destroy not null");
+			unregisterReceiver(mAlarmChangedReceiver);
+			mAlarmChangedReceiver = null;
+		}
+	}
+
+	private void setupAMPMReceiver() {
+		if (mAmPmCheckReceiver == null) {
+			mAmPmCheckReceiver = new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					updateWidget();
+				}
+			};
+			registerReceiver(mAmPmCheckReceiver, new IntentFilter(ClockWidget.CLOCK_AM_PM_UPDATE));
+		}
+	}
+
+	private void setupAlarmChangeReceiver() {
+		if (mAlarmChangedReceiver == null) {
+			Log.wtf(TAG, "is null");
+			mAlarmChangedReceiver = new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					Log.wtf(TAG, "Alarm changed!!!!");
+					updateWidget();
+				}
+			};
+
+				registerReceiver(mAlarmChangedReceiver, new IntentFilter(ACTION_ALARM_CHANGED));
+		}
 	}
 
 	private void setupLayoutRotateReceiver() {
