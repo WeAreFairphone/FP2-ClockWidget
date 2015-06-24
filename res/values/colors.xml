@@ -1,7 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
 
-    <color name="black_overlay">#66000000</color>
     <color name="white">#FFFFFF</color>
     <color name="blue">#2aa8e0</color>
 
