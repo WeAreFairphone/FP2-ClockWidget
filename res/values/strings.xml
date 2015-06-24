@@ -35,5 +35,10 @@
     <string name="hour">hour</string>
     <string name="weeks">weeks</string>
     <string name="week">week</string>
+    <string name="been_in_peace_for">I\'ve been in peace of mind for</string>
+    <string name="peace_record_text">A new personal best!</string>
+    <string name="my_fairphone_is">My Fairphone is</string>
+    <string name="old">old!</string>
+    <string name="share_to">Share to</string>
 
 </resources>

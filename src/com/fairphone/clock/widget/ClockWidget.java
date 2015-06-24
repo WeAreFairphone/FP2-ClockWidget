@@ -31,7 +31,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-
 public class ClockWidget extends AppWidgetProvider {
 
     private static final String TAG = ClockWidget.class.getSimpleName();
@@ -115,12 +114,7 @@ public class ClockWidget extends AppWidgetProvider {
                 setupShareOnClick(context, widget, R.id.peace_share_button);
                 break;
             case R.id.clock_widget_battery:
-                int batteryLevel = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_LEVEL, 0);
-                int batteryStatus = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_STATUS, 0);
-                long chargingTime = sharedPrefs.getLong(ClockScreenService.PREFERENCE_BATTERY_TIME_UNTIL_CHARGED, System.currentTimeMillis());
-                long remainingTime = sharedPrefs.getLong(ClockScreenService.PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED, System.currentTimeMillis());
-                updateBatteryStatusAndLevel(context, widget, batteryLevel, batteryStatus, remainingTime, chargingTime);
-                setupLastLongerOnClick(context, widget);
+                setupBatteryLayout(context, widget, sharedPrefs);
                 break;
             case R.id.clock_widget_yours_since:
                 setYourFairphoneSince(context, widget, sharedPrefs.getLong(ClockScreenService.PREFERENCE_YOUR_FAIRPHONE_SINCE, 0L));
@@ -130,6 +124,15 @@ public class ClockWidget extends AppWidgetProvider {
                 Log.wtf(TAG, "Unknown layout: " + active_layout);
 
         }
+    }
+
+    private void setupBatteryLayout(Context context, RemoteViews widget, SharedPreferences sharedPrefs) {
+        int batteryLevel = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_LEVEL, 0);
+        int batteryStatus = sharedPrefs.getInt(ClockScreenService.PREFERENCE_BATTERY_STATUS, 0);
+        long chargingTime = sharedPrefs.getLong(ClockScreenService.PREFERENCE_BATTERY_TIME_UNTIL_CHARGED, System.currentTimeMillis());
+        long remainingTime = sharedPrefs.getLong(ClockScreenService.PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED, System.currentTimeMillis());
+        updateBatteryStatusAndLevel(context, widget, batteryLevel, batteryStatus, remainingTime, chargingTime);
+        setupLastLongerOnClick(context, widget);
     }
 
     private void setupLastLongerOnClick(Context context, RemoteViews widget) {
@@ -299,9 +302,9 @@ public class ClockWidget extends AppWidgetProvider {
         if (DateFormat.is24HourFormat(context)) {
             widget.setTextViewText(R.id.hours_text, String.format("%02d", endtime.getHourOfDay()));
             widget.setTextViewText(R.id.battery_am_pm_indicator, "");
-        }else{
+        } else {
             widget.setTextViewText(R.id.hours_text, String.format("%d", endtime.property(DateTimeFieldType.clockhourOfHalfday()).get()));
-            widget.setTextViewText(R.id.battery_am_pm_indicator, endtime.property(DateTimeFieldType.halfdayOfDay()).get() == 0?"AM":"PM");
+            widget.setTextViewText(R.id.battery_am_pm_indicator, endtime.property(DateTimeFieldType.halfdayOfDay()).get() == 0 ? "AM" : "PM");
         }
     }
 

@@ -41,6 +41,7 @@ public class ClockScreenService extends Service {
     public static final String PREFERENCE_BATTERY_CHANGED_TIMESTAMP = "com.fairphone.clock.PREFERENCE_BATTERY_CHANGED_TIMESTAMP";
     public static final String PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED = "com.fairphone.clock.PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED";
     public static final String PREFERENCE_BATTERY_TIME_UNTIL_CHARGED = "com.fairphone.clock.PREFERENCE_BATTERY_TIME_UNTIL_CHARGED";
+    public static final long MINUTES_IN_MILIS = 60000L;
 
     private BroadcastReceiver mRotateReceiver;
     private BroadcastReceiver mShareReceiver;
@@ -201,7 +202,7 @@ public class ClockScreenService extends Service {
                         mScreenOffTimestamp = System.currentTimeMillis();
                     } else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
                         if (mScreenOffTimestamp != -1) {
-                            long pomInMinutes = (System.currentTimeMillis() - mScreenOffTimestamp) / 60000L;
+                            long pomInMinutes = (System.currentTimeMillis() - mScreenOffTimestamp) / MINUTES_IN_MILIS;
                             long pomRecord = mSharedPreferences.getLong(PREFERENCE_POM_RECORD, 0);
                             if (pomInMinutes > pomRecord) {
                                 pomRecord = pomInMinutes;
@@ -232,25 +233,33 @@ public class ClockScreenService extends Service {
         int currentStatus = mSharedPreferences.getInt(PREFERENCE_BATTERY_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
         int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL, 0);
         int status = intent.getIntExtra(BatteryManager.EXTRA_STATUS, BatteryManager.BATTERY_STATUS_UNKNOWN);
+
         if (currentLevel != level || currentStatus != status) {
             int scale = intent.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
             Log.d(TAG, "Battery Level: " + level + "\nBattery Status: " + ClockWidget.getBatteryStatusAsString(status) + "\nBattery Scale: " + scale);
             //Toast.makeText(getApplicationContext(), "Battery Status: " + ClockWidget.getBatteryStatusAsString(status),Toast.LENGTH_SHORT).show();
-            saveIntPreference(PREFERENCE_BATTERY_LEVEL, level);
-            saveIntPreference(PREFERENCE_BATTERY_STATUS, status);
+            updateBatteryStats(level, status);
+            updateBatteryDurationTimes(level, scale);
             batteryChanged = true;
-            long lasttime = mSharedPreferences.getLong(PREFERENCE_BATTERY_CHANGED_TIMESTAMP, System.currentTimeMillis());
-            long now = System.currentTimeMillis();
-            long timeUntilCharge = (now - lasttime) * (scale - level);
-            long timeUntilDischarge = (now - lasttime) * (level);
-            saveLongPreference(PREFERENCE_BATTERY_CHANGED_TIMESTAMP, now);
-            saveLongPreference(PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED, timeUntilDischarge);
-            saveLongPreference(PREFERENCE_BATTERY_TIME_UNTIL_CHARGED, timeUntilCharge);
         }
 
         return batteryChanged;
     }
 
+    private void updateBatteryDurationTimes(int level, int scale) {
+        long lasttime = mSharedPreferences.getLong(PREFERENCE_BATTERY_CHANGED_TIMESTAMP, System.currentTimeMillis());
+        long now = System.currentTimeMillis();
+        long timeUntilCharge = (now - lasttime) * Math.abs(scale - level);
+        long timeUntilDischarge = (now - lasttime) * (level);
+        saveLongPreference(PREFERENCE_BATTERY_CHANGED_TIMESTAMP, now);
+        saveLongPreference(PREFERENCE_BATTERY_TIME_UNTIL_DISCHARGED, timeUntilDischarge);
+        saveLongPreference(PREFERENCE_BATTERY_TIME_UNTIL_CHARGED, timeUntilCharge);
+    }
+
+    private void updateBatteryStats(int level, int status) {
+        saveIntPreference(PREFERENCE_BATTERY_LEVEL, level);
+        saveIntPreference(PREFERENCE_BATTERY_STATUS, status);
+    }
 
     private void setupShareReceiver() {
         if (mShareReceiver == null) {
@@ -267,28 +276,17 @@ public class ClockScreenService extends Service {
                     Resources resources = getResources();
                     switch (active_layout) {
                         case R.id.clock_widget_peace_of_mind:
-                            long pom_current = mSharedPreferences.getLong(PREFERENCE_POM_CURRENT, 0);
-                            long pom_record = mSharedPreferences.getLong(PREFERENCE_POM_RECORD, 0);
-                            shareText = "I've been in peace of mind for " + pom_current + " minutes!";
-                            if (pom_current == pom_record) {
-                                shareText += " A new personal best!";
-                            }
+                            shareText = getPeaceOfMindShareText(resources);
                             break;
                         case R.id.clock_widget_yours_since:
-                            shareText = "My Fairphone is ";
-                            long startTime = mSharedPreferences.getLong(PREFERENCE_YOUR_FAIRPHONE_SINCE, 0L);
-                            if (startTime == 0L) {
-                                startTime = System.currentTimeMillis();
-                            }
-                            Period pp = new Period(startTime, System.currentTimeMillis(), PeriodType.standard().withSecondsRemoved().withMillisRemoved());
-                            shareText += PeriodFormat.wordBased().print(pp) + " old!";
+                            shareText = getYourFairphoneSinceShareText(resources);
                             break;
                         default:
                             Log.w(TAG, "Unknown Share button: " + active_layout);
                     }
                     if (!TextUtils.isEmpty(shareText)) {
                         sendIntent.putExtra(Intent.EXTRA_TEXT, shareText);
-                        sendIntent = Intent.createChooser(sendIntent, "Share to");
+                        sendIntent = Intent.createChooser(sendIntent, resources.getString(R.string.share_to));
                         sendIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         dismissKeyguard();
                         startActivity(sendIntent);
@@ -297,6 +295,28 @@ public class ClockScreenService extends Service {
             };
             registerReceiver(mShareReceiver, new IntentFilter(ACTION_SHARE));
         }
+    }
+
+    private String getYourFairphoneSinceShareText(Resources resources) {
+        String shareText;
+        long startTime = mSharedPreferences.getLong(PREFERENCE_YOUR_FAIRPHONE_SINCE, 0L);
+        if (startTime == 0L) {
+            startTime = System.currentTimeMillis();
+        }
+        Period pp = new Period(startTime, System.currentTimeMillis(), PeriodType.standard().withSecondsRemoved().withMillisRemoved());
+        shareText = String.format("%s %s %s", resources.getString(R.string.my_fairphone_is), PeriodFormat.wordBased().print(pp), resources.getString(R.string.old));
+        return shareText;
+    }
+
+    private String getPeaceOfMindShareText(Resources resources) {
+        String shareText;
+        long pom_current = mSharedPreferences.getLong(PREFERENCE_POM_CURRENT, 0);
+        long pom_record = mSharedPreferences.getLong(PREFERENCE_POM_RECORD, 0);
+        shareText = String.format("%s %d %s!", resources.getString(R.string.been_in_peace_for), pom_current, resources.getString(R.string.minutes));
+        if (pom_current == pom_record) {
+            shareText += " " + resources.getString(R.string.peace_record_text);
+        }
+        return shareText;
     }
 
     private void startYourFairphoneSinceCounter() {
