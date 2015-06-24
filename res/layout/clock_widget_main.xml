@@ -20,7 +20,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-15dp"
+        android:layout_marginTop="-18dp"
         android:orientation="horizontal">
 
         <TextClock
@@ -39,53 +39,67 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:includeFontPadding="false"
-            android:paddingLeft="@dimen/clock_padding" />
+            android:paddingLeft="5dp" />
     </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="-15dp"
+        android:layout_marginTop="-18dp"
         android:orientation="horizontal">
 
         <TextClock
-            style="@style/text_medium_20sp"
+            style="@style/text_regular_bold_67sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:format12Hour="@string/month_format"
-            android:format24Hour="@string/month_format"
+            android:layout_marginTop="-14dp"
+            android:format12Hour="@string/day_number_format"
+            android:format24Hour="@string/day_number_format"
             android:gravity="left"
             android:includeFontPadding="false" />
 
-        <TextClock
-            style="@style/text_light_20sp"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:format12Hour="@string/year_format"
-            android:format24Hour="@string/year_format"
-            android:gravity="left"
-            android:includeFontPadding="false"
-            android:paddingLeft="@dimen/clock_padding" />
+            android:layout_marginTop="-6dp"
+            android:orientation="vertical"
+            android:paddingLeft="3dp">
+
+            <TextClock
+                style="@style/text_regular_bold_34sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:format12Hour="@string/day_name_format"
+                android:format24Hour="@string/day_name_format"
+                android:gravity="left"
+                android:includeFontPadding="false" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-7dp"
+                android:orientation="horizontal">
+
+                <TextClock
+                    style="@style/text_medium_20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:format12Hour="@string/month_format"
+                    android:format24Hour="@string/month_format"
+                    android:gravity="left"
+                    android:includeFontPadding="false" />
+
+                <TextClock
+                    style="@style/text_light_20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:format12Hour="@string/year_format"
+                    android:format24Hour="@string/year_format"
+                    android:gravity="left"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="@dimen/clock_padding" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-
-    <TextClock
-        style="@style/text_regular_bold_34sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-6dp"
-        android:format12Hour="@string/day_name_format"
-        android:format24Hour="@string/day_name_format"
-        android:gravity="left"
-        android:includeFontPadding="false" />
-
-    <TextClock
-        style="@style/text_regular_bold_67sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-15dp"
-        android:format12Hour="@string/day_number_format"
-        android:format24Hour="@string/day_number_format"
-        android:gravity="left"
-        android:includeFontPadding="false" />
-
 </LinearLayout>
