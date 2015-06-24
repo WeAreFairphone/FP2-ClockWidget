@@ -48,6 +48,7 @@ public class ClockScreenService extends Service {
     private BroadcastReceiver mBatteryStatsReceiver;
     private SharedPreferences mSharedPreferences;
     private BroadcastReceiver mLockReceiver;
+    private BroadcastReceiver mTimeChangedReceiver;
     private BroadcastReceiver mAmPmCheckReceiver;
     private BroadcastReceiver mAlarmChangedReceiver;
 
@@ -67,6 +68,7 @@ public class ClockScreenService extends Service {
         setupLockReceiver();
         setupAMPMReceiver();
         setupAlarmChangeReceiver();
+        setupTimeChangedReceiver();
 
         return START_STICKY;
     }
@@ -93,7 +95,6 @@ public class ClockScreenService extends Service {
         }
     }
 
-
 	private void setupAMPMReceiver() {
 		if (mAmPmCheckReceiver == null) {
 			mAmPmCheckReceiver = new BroadcastReceiver() {
@@ -106,11 +107,29 @@ public class ClockScreenService extends Service {
 		}
 	}
 
+    private void setupTimeChangedReceiver() {
+        if (mTimeChangedReceiver == null) {
+            mTimeChangedReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    updateWidget();
+                }
+            };
+
+            IntentFilter intentFilter = new IntentFilter();
+            intentFilter.addAction(Intent.ACTION_TIME_CHANGED);
+            intentFilter.addAction(Intent.ACTION_TIMEZONE_CHANGED);
+
+            registerReceiver(mTimeChangedReceiver, intentFilter);
+        }
+    }
+
 	private void setupAlarmChangeReceiver() {
 		if (mAlarmChangedReceiver == null) {
 			mAlarmChangedReceiver = new BroadcastReceiver() {
 				@Override
 				public void onReceive(Context context, Intent intent) {
+
 					updateWidget();
 				}
 			};
