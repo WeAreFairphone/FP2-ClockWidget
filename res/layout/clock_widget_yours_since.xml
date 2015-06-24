@@ -1,28 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
     <TextView
         style="@style/text_light_21sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="23.67dp"
         android:gravity="left"
         android:includeFontPadding="false"
         android:paddingLeft="31dp"
         android:text="@string/your_fairphone_for" />
 
     <LinearLayout
+        android:id="@+id/eleapsed_years_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46.67dp"
         android:orientation="horizontal"
-        android:paddingLeft="31dp">
+        android:paddingLeft="31dp"
+        android:layout_marginTop="30.45dp">
 
         <TextView
             android:id="@+id/eleapsed_years_text"
             style="@style/text_regular_bold_45sp"
+            android:textSize="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -33,6 +37,7 @@
         <TextView
             android:id="@+id/years_text"
             style="@style/text_condensed_bold_45sp"
+            android:textSize="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -41,14 +46,18 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/eleapsed_months_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46.67dp"
         android:orientation="horizontal"
-        android:paddingLeft="31dp">
+        android:paddingLeft="31dp"
+        android:layout_below="@id/eleapsed_years_container"
+        android:layout_marginTop="-8.67dp">
 
         <TextView
             android:id="@+id/eleapsed_months_text"
             style="@style/text_regular_bold_45sp"
+            android:textSize="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -59,6 +68,7 @@
         <TextView
             android:id="@+id/months_text"
             style="@style/text_condensed_bold_45sp"
+            android:textSize="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -67,14 +77,18 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/eleapsed_days_container"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="46.67dp"
         android:orientation="horizontal"
-        android:paddingLeft="31dp">
+        android:paddingLeft="31dp"
+        android:layout_below="@id/eleapsed_months_container"
+        android:layout_marginTop="-8.67dp">
 
         <TextView
             android:id="@+id/eleapsed_days_text"
             style="@style/text_regular_bold_45sp"
+            android:textSize="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
@@ -85,24 +99,37 @@
         <TextView
             android:id="@+id/days_text"
             style="@style/text_condensed_bold_45sp"
+            android:textSize="40dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="left"
             android:includeFontPadding="false"
             android:text="@string/days" />
 
-        <TextView
-            android:id="@+id/yours_since_share_button"
-            style="@style/text_condensed_bold_italic_18sp"
-            android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:background="@drawable/button_states_blue"
-            android:drawablePadding="@dimen/clock_padding"
-            android:drawableRight="@drawable/share_icon"
-            android:gravity="left"
-            android:padding="5dp"
-            android:text="@string/share" />
-
     </LinearLayout>
 
-</LinearLayout>
+    <FrameLayout
+        android:id="@+id/yours_since_share_button"
+        android:layout_width="84.67dp"
+        android:layout_height="32dp"
+        android:background="@drawable/button_states_blue"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:layout_marginTop="121.45dp"
+        android:layout_alignParentRight="true">
+        <TextView
+            style="@style/text_condensed_bold_italic_18sp"
+            android:textSize="17.67dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:layout_gravity="center_vertical"
+            android:text="@string/share"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:src="@drawable/share_icon"/>
+    </FrameLayout>
+</RelativeLayout>
