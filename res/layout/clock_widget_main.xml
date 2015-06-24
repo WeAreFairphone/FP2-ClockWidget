@@ -53,7 +53,6 @@
             style="@style/text_regular_bold_67sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAllCaps="true"
             android:layout_marginTop="-14dp"
             android:format12Hour="@string/day_number_format"
             android:format24Hour="@string/day_number_format"
@@ -63,15 +62,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
-            android:format12Hour="@string/year_format"
-            android:format24Hour="@string/year_format"
-            android:textAllCaps="true"
-            android:gravity="left"
-            android:includeFontPadding="false"
             android:layout_marginTop="-6dp"
             android:orientation="vertical"
-            android:paddingLeft="3dp"/>
+            android:paddingLeft="3dp">
 
             <TextClock
                 style="@style/text_regular_bold_34sp"
@@ -104,6 +97,7 @@
                     android:format12Hour="@string/year_format"
                     android:format24Hour="@string/year_format"
                     android:gravity="left"
+                    android:textAllCaps="true"
                     android:includeFontPadding="false"
                     android:paddingLeft="@dimen/clock_padding" />
             </LinearLayout>
