@@ -54,6 +54,7 @@
             android:layout_height="wrap_content"
             android:format12Hour="@string/month_format"
             android:format24Hour="@string/month_format"
+            android:textAllCaps="true"
             android:gravity="left"
             android:includeFontPadding="false" />
 
@@ -63,6 +64,7 @@
             android:layout_height="wrap_content"
             android:format12Hour="@string/year_format"
             android:format24Hour="@string/year_format"
+            android:textAllCaps="true"
             android:gravity="left"
             android:includeFontPadding="false"
             android:paddingLeft="@dimen/clock_padding" />

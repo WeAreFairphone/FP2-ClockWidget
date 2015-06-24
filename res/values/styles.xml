@@ -135,7 +135,6 @@
 
     <style name="text_light_20sp" parent="text_white_20sp">
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:textAllCaps">true</item>
     </style>
 
     <style name="text_white_34sp">
@@ -206,7 +205,15 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="text_white_14sp">
+        <item name="android:textSize">@dimen/text_size_14sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
     <style name="text_light_16sp" parent="text_white_16sp">
+        <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+    <style name="text_light_14sp" parent="text_white_14sp">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
