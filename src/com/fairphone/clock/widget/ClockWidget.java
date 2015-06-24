@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.opengl.Visibility;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -60,27 +59,24 @@ public class ClockWidget extends AppWidgetProvider {
         appWidgetManager.updateAppWidget(appWidgetIds, mainWidgetView);
 
 
-
-
     }
 
     @Override
     public void onDisabled(Context context) {
         super.onDisabled(context);
-        AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(createUpdateIntent(context));
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-        if(CLOCK_AM_PM_UPDATE.equals(intent.getAction())) {
+        if (CLOCK_AM_PM_UPDATE.equals(intent.getAction())) {
             context.startService(new Intent(context, ClockScreenService.class));
         }
     }
 
-    private void setupAmPmManager(Context context)
-    {
+    private void setupAmPmManager(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -160,14 +156,10 @@ public class ClockWidget extends AppWidgetProvider {
         widget.setOnClickPendingIntent(viewId, launchPendingIntent);
     }
 
-    private void setClockAmPm(Context context, RemoteViews widget)
-    {
-        if(DateFormat.is24HourFormat(context))
-        {
+    private void setClockAmPm(Context context, RemoteViews widget) {
+        if (DateFormat.is24HourFormat(context)) {
             widget.setViewVisibility(R.id.ampm_text, View.GONE);
-        }
-        else
-        {
+        } else {
             widget.setViewVisibility(R.id.ampm_text, View.VISIBLE);
             Calendar currentCalendar = Calendar.getInstance();
 
@@ -175,16 +167,14 @@ public class ClockWidget extends AppWidgetProvider {
 
             if (hour < 12) {
                 widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_am_default));
-            }
-            else{
+            } else {
                 widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_pm_default));
             }
         }
 
     }
 
-    private void setNextScheduledAlarm(Context context, RemoteViews widget)
-    {
+    private void setNextScheduledAlarm(Context context, RemoteViews widget) {
         String nextAlarm = getNextAlarm(context);
 
         if (TextUtils.isEmpty(nextAlarm)) {
@@ -198,64 +188,59 @@ public class ClockWidget extends AppWidgetProvider {
 
     private String getNextAlarm(Context context) {
         String nextAlarm = "";
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-        {
-            AlarmManager am = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
-            if(am != null && am.getNextAlarmClock() != null)
-            {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (am != null && am.getNextAlarmClock() != null) {
                 String amPmMarker = "";
                 SimpleDateFormat sdf;
                 boolean is24hFormat = DateFormat.is24HourFormat(context);
                 long alarmTriggerTime = am.getNextAlarmClock().getTriggerTime();
 
-                if(is24hFormat)
-                {
+                if (is24hFormat) {
                     sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_24h_format));
-                }else
-                {
+                } else {
                     sdf = new SimpleDateFormat(context.getResources().getString(R.string.alarm_clock_12h_format));
                     Calendar cal = Calendar.getInstance();
                     cal.setTimeInMillis(alarmTriggerTime);
 
-                    if(cal.get(Calendar.HOUR_OF_DAY) < 12)
-                    {
+                    if (cal.get(Calendar.HOUR_OF_DAY) < 12) {
                         amPmMarker = " " + context.getResources().getString(R.string.time_am_default);
-                    }else{
+                    } else {
                         amPmMarker = " " + context.getResources().getString(R.string.time_pm_default);
                     }
                 }
                 nextAlarm = sdf.format(am.getNextAlarmClock().getTriggerTime()) + amPmMarker;
             }
-        }
-        else
-        {
+        } else {
             nextAlarm = Settings.System.getString(context.getContentResolver(), Settings.System.NEXT_ALARM_FORMATTED);
         }
         return nextAlarm;
     }
 
-    private void updateBatteryLevel(RemoteViews widget, int level) {
+    private void updateBatteryLevel(RemoteViews widget, int level, boolean isCharging) {
 
-        if (level <= 10) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_10);
+        if (level <= 5) {
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_00 : R.drawable.battery_00);
+        } else if (level <= 10) {
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_10 : R.drawable.battery_10);
         } else if (level <= 20) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_20);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_20 : R.drawable.battery_20);
         } else if (level <= 30) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_30);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_30 : R.drawable.battery_30);
         } else if (level <= 40) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_40);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_40 : R.drawable.battery_40);
         } else if (level <= 50) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_50);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_50 : R.drawable.battery_50);
         } else if (level <= 60) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_60);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_60 : R.drawable.battery_60);
         } else if (level <= 70) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_70);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_70 : R.drawable.battery_70);
         } else if (level <= 80) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_80);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_80 : R.drawable.battery_80);
         } else if (level <= 90) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_90);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_90 : R.drawable.battery_90);
         } else if (level <= 100) {
-            widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_100);
+            widget.setImageViewResource(R.id.battery_level_image, isCharging ? R.drawable.battery_charging_100 : R.drawable.battery_100);
         }
     }
 
@@ -265,7 +250,7 @@ public class ClockWidget extends AppWidgetProvider {
         switch (status) {
             case BatteryManager.BATTERY_STATUS_CHARGING:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_will_be_charged_at));
-                widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_charging);
+                updateBatteryLevel(widget, level, true);
                 widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
                 widget.setViewVisibility(R.id.charged_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
@@ -274,7 +259,7 @@ public class ClockWidget extends AppWidgetProvider {
                 break;
             case BatteryManager.BATTERY_STATUS_FULL:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_is_fully));
-                widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_100);
+                widget.setImageViewResource(R.id.battery_level_image, R.drawable.battery_charging_100);
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
                 widget.setViewVisibility(R.id.battery_time_group, View.GONE);
                 widget.setViewVisibility(R.id.charged_text, View.VISIBLE);
@@ -284,7 +269,7 @@ public class ClockWidget extends AppWidgetProvider {
             case BatteryManager.BATTERY_STATUS_UNKNOWN:
             default:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_charge_will_last_until));
-                updateBatteryLevel(widget, level);
+                updateBatteryLevel(widget, level, false);
                 widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
                 widget.setViewVisibility(R.id.charged_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.VISIBLE);
