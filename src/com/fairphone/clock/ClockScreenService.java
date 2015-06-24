@@ -15,16 +15,13 @@ import android.os.BatteryManager;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
-import java.util.Locale;
+
 
 import com.fairphone.clock.widget.ClockWidget;
 
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormat;
-import org.joda.time.format.PeriodFormatter;
-import org.joda.time.format.PeriodFormatterBuilder;
-
 
 public class ClockScreenService extends Service {
 
@@ -77,9 +74,7 @@ public class ClockScreenService extends Service {
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		Log.wtf(TAG, "destroy");
 		if (mAlarmChangedReceiver != null) {
-			Log.wtf(TAG, "destroy not null");
 			unregisterReceiver(mAlarmChangedReceiver);
 			mAlarmChangedReceiver = null;
 		}
@@ -113,11 +108,9 @@ public class ClockScreenService extends Service {
 
 	private void setupAlarmChangeReceiver() {
 		if (mAlarmChangedReceiver == null) {
-			Log.wtf(TAG, "is null");
 			mAlarmChangedReceiver = new BroadcastReceiver() {
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					Log.wtf(TAG, "Alarm changed!!!!");
 					updateWidget();
 				}
 			};

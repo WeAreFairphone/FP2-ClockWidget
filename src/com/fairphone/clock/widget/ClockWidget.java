@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.opengl.Visibility;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.provider.Settings;
@@ -22,17 +23,13 @@ import com.fairphone.clock.R;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeFieldType;
-import org.joda.time.DateTimeZone;
 import org.joda.time.Period;
 import org.joda.time.format.PeriodFormat;
 
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
-
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 
 public class ClockWidget extends AppWidgetProvider {
@@ -88,8 +85,8 @@ public class ClockWidget extends AppWidgetProvider {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.MINUTE, 60-calendar.get(Calendar.MINUTE));
-        calendar.add(Calendar.SECOND, 60-calendar.get(Calendar.SECOND));
+        calendar.add(Calendar.MINUTE, 60 - calendar.get(Calendar.MINUTE));
+        calendar.add(Calendar.SECOND, 60 - calendar.get(Calendar.SECOND));
 
         alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 3600000, createUpdateIntent(context));
     }
@@ -159,18 +156,28 @@ public class ClockWidget extends AppWidgetProvider {
         PendingIntent launchPendingIntent = PendingIntent.getBroadcast(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(viewId, launchPendingIntent);
     }
-    
+
     private void setClockAmPm(Context context, RemoteViews widget)
     {
-        Calendar currentCalendar = Calendar.getInstance();
-        int hour = currentCalendar.get(Calendar.HOUR_OF_DAY);
+        if(DateFormat.is24HourFormat(context))
+        {
+            widget.setViewVisibility(R.id.ampm_text, View.GONE);
+        }
+        else
+        {
+            widget.setViewVisibility(R.id.ampm_text, View.VISIBLE);
+            Calendar currentCalendar = Calendar.getInstance();
 
-        if (hour < 12) {
-            widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_am_default));
+            int hour = currentCalendar.get(Calendar.HOUR_OF_DAY);
+
+            if (hour < 12) {
+                widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_am_default));
+            }
+            else{
+                widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_pm_default));
+            }
         }
-        else{
-            widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_pm_default));
-        }
+
     }
 
     private void setNextScheduledAlarm(Context context, RemoteViews widget)
