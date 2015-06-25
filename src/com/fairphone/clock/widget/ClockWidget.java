@@ -229,13 +229,12 @@ public class ClockWidget extends AppWidgetProvider {
         Resources resources = context.getResources();
         switch (status) {
             case BatteryManager.BATTERY_STATUS_CHARGING:
-                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_will_be_charged_at));
                 updateBatteryLevel(widget, level, true);
-                widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
                 widget.setViewVisibility(R.id.charged_text, View.GONE);
+                widget.setViewVisibility(R.id.unplug_charger_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
 
-                getRemainingTime(context, widget, chargingTime);
+                getRemainingTime(context, resources, widget, chargingTime, true);
                 break;
             case BatteryManager.BATTERY_STATUS_FULL:
                 widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_is_fully));
@@ -243,38 +242,52 @@ public class ClockWidget extends AppWidgetProvider {
                 widget.setViewVisibility(R.id.last_longer_button, View.INVISIBLE);
                 widget.setViewVisibility(R.id.battery_time_group, View.GONE);
                 widget.setViewVisibility(R.id.charged_text, View.VISIBLE);
+                widget.setViewVisibility(R.id.unplug_charger_text, View.VISIBLE);
                 break;
             case BatteryManager.BATTERY_STATUS_DISCHARGING:
             case BatteryManager.BATTERY_STATUS_NOT_CHARGING:
             case BatteryManager.BATTERY_STATUS_UNKNOWN:
             default:
-                widget.setTextViewText(R.id.battery_description, resources.getString(R.string.battery_charge_will_last_until));
+
                 updateBatteryLevel(widget, level, false);
-                widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
                 widget.setViewVisibility(R.id.charged_text, View.GONE);
+                widget.setViewVisibility(R.id.unplug_charger_text, View.GONE);
                 widget.setViewVisibility(R.id.last_longer_button, View.VISIBLE);
 
-                getRemainingTime(context, widget, remainingTime);
+                getRemainingTime(context, resources, widget, remainingTime, false);
                 break;
         }
     }
 
-    private void getRemainingTime(Context context, RemoteViews widget, long remainingTime) {
-        DateTime endtime = new DateTime();
-        endtime = endtime.plus(remainingTime);
-        Log.d(TAG, "endTIme: " + endtime.toString() + "\nRemaining time: " + PeriodFormat.getDefault().withLocale(Locale.getDefault()).print(new Period(remainingTime)));
-        widget.setTextViewText(R.id.minutes_text, String.format("%02d", endtime.getMinuteOfHour()));
-        if (DateFormat.is24HourFormat(context)) {
-            widget.setTextViewText(R.id.hours_text, String.format("%02d", endtime.getHourOfDay()));
-            widget.setTextViewText(R.id.battery_am_pm_indicator, "");
+    private void getRemainingTime(Context context, Resources resources, RemoteViews widget, long remainingTime, boolean isCharging) {
+        DateTime currentTime = new DateTime();
+        DateTime endtime = currentTime.plus(remainingTime);
+
+        if (endtime.getDayOfMonth() <= currentTime.getDayOfMonth() + 1) {
+            Log.d(TAG, "endTIme: " + endtime.toString() + "\nRemaining time: " + PeriodFormat.getDefault().withLocale(Locale.getDefault()).print(new Period(remainingTime)));
+            widget.setTextViewText(R.id.battery_description, isCharging ? resources.getString(R.string.battery_will_be_charged_at) : resources.getString(R.string.battery_charge_will_last_until));
+            widget.setViewVisibility(R.id.battery_time_group, View.VISIBLE);
+            widget.setViewVisibility(R.id.battery_days_left, View.GONE);
+            if (DateFormat.is24HourFormat(context)) {
+                widget.setTextViewText(R.id.hours_text, String.format("%02d", endtime.getHourOfDay()));
+                widget.setTextViewText(R.id.battery_am_pm_indicator, "");
+            } else {
+                widget.setTextViewText(R.id.hours_text, String.format("%d", endtime.property(DateTimeFieldType.clockhourOfHalfday()).get()));
+                widget.setTextViewText(R.id.battery_am_pm_indicator, endtime.property(DateTimeFieldType.halfdayOfDay()).get() == 0 ? "AM" : "PM");
+            }
+            widget.setTextViewText(R.id.minutes_text, String.format("%02d", endtime.getMinuteOfHour()));
         } else {
-            widget.setTextViewText(R.id.hours_text, String.format("%d", endtime.property(DateTimeFieldType.clockhourOfHalfday()).get()));
-            widget.setTextViewText(R.id.battery_am_pm_indicator, endtime.property(DateTimeFieldType.halfdayOfDay()).get() == 0 ? "AM" : "PM");
+            widget.setTextViewText(R.id.battery_description, isCharging ? resources.getString(R.string.battery_will_be_charged_in) : resources.getString(R.string.battery_charge_will_last));
+            Period remaining = new Period(currentTime.getMillis(), endtime.getMillis());
+            int diffMonthDays = ((remaining.getWeeks() * 7) + remaining.getDays());
+            widget.setTextViewText(R.id.battery_days_left, String.format("%d %s", diffMonthDays, resources.getString(R.string.days)));
+            widget.setViewVisibility(R.id.battery_time_group, View.GONE);
+            widget.setViewVisibility(R.id.battery_days_left, View.VISIBLE);
         }
     }
 
     public static String getBatteryStatusAsString(int status) {
-        String desc = "Uknown: ";
+        String desc = "Unknown: ";
         switch (status) {
             case BatteryManager.BATTERY_STATUS_CHARGING:
                 desc = "BATTERY_STATUS_CHARGING";

@@ -123,6 +123,16 @@
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
+    <style name="text_white_56sp">
+        <item name="android:textSize">@dimen/text_size_56sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="text_condensed_bold_56sp" parent="text_white_56sp">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="text_white_20sp">
         <item name="android:textSize">@dimen/text_size_20sp</item>
         <item name="android:textColor">@color/white</item>
@@ -174,7 +184,6 @@
 
     <style name="text_light_67sp" parent="text_white_67sp">
         <item name="android:fontFamily">sans-serif-light</item>
-        <item name="android:alpha">0.5</item>
     </style>
 
     <style name="text_white_45sp">
