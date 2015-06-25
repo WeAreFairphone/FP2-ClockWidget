@@ -38,52 +38,32 @@ public class ClockWidget extends AppWidgetProvider {
 
     private static final SecureRandom r = new SecureRandom();
 
-    public static final String CLOCK_AM_PM_UPDATE = "com.fairphone.clock.widget.ClockWidget.CLOCK_AM_PM_UPDATE";
-
     @Override
     public void onEnabled(Context context) {
+        Log.wtf(TAG, "onEnabled");
         super.onEnabled(context);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        Log.wtf(TAG, "onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         context.startService(new Intent(context, ClockScreenService.class));
-
         RemoteViews mainWidgetView = new RemoteViews(context.getPackageName(), R.layout.widget_main);
         setupView(context, mainWidgetView);
-        setupAmPmManager(context);
 
         appWidgetManager.updateAppWidget(appWidgetIds, null);
         appWidgetManager.updateAppWidget(appWidgetIds, mainWidgetView);
-
 
     }
 
     @Override
     public void onDisabled(Context context) {
+        Log.wtf(TAG, "onDisabled");
         super.onDisabled(context);
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarmManager.cancel(createUpdateIntent(context));
-    }
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        super.onReceive(context, intent);
-        if (CLOCK_AM_PM_UPDATE.equals(intent.getAction())) {
-            context.startService(new Intent(context, ClockScreenService.class));
-        }
-    }
-
-    private void setupAmPmManager(Context context) {
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.add(Calendar.MINUTE, 60 - calendar.get(Calendar.MINUTE));
-        calendar.add(Calendar.SECOND, 60 - calendar.get(Calendar.SECOND));
-
-        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 3600000, createUpdateIntent(context));
+        context.stopService(new Intent(context, ClockScreenService.class));
     }
 
     private void setupView(Context context, RemoteViews mainWidgetView) {
@@ -316,13 +296,6 @@ public class ClockWidget extends AppWidgetProvider {
                 break;
         }
         return desc;
-    }
-
-
-    private PendingIntent createUpdateIntent(Context context) {
-        Intent intent = new Intent(CLOCK_AM_PM_UPDATE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        return pendingIntent;
     }
 
     private void setYourFairphoneSince(Context context, RemoteViews widget, long startTime) {

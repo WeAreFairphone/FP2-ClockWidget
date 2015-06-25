@@ -1,7 +1,9 @@
 package com.fairphone.clock;
 
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.KeyguardManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
@@ -23,6 +25,8 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.joda.time.format.PeriodFormat;
 
+import java.util.Calendar;
+
 public class ClockScreenService extends Service {
 
 	private static final String TAG = ClockScreenService.class.getSimpleName();
@@ -31,6 +35,8 @@ public class ClockScreenService extends Service {
     public static final String ACTION_ROTATE_VIEW = "com.fairphone.clock.ACTION_ROTATE_VIEW";
     public static final String ACTION_SHARE = "com.fairphone.clock.ACTION_SHARE";
     public static final String ACTION_BATTERY_SAVER = "com.fairphone.clock.ACTION_BATTERY_SAVER";
+    public static final String ACTION_CLOCK_UPDATE = "com.fairphone.clock.widget.ClockWidget.CLOCK_UPDATE";
+
     public static final String FAIRPHONE_CLOCK_PREFERENCES = "com.fairphone.clock.FAIRPHONE_CLOCK_PREFERENCES";
     public static final String PREFERENCE_BATTERY_LEVEL = "com.fairphone.clock.PREFERENCE_BATTERY_LEVEL";
     public static final String PREFERENCE_ACTIVE_LAYOUT = "com.fairphone.clock.PREFERENCE_ACTIVE_LAYOUT";
@@ -53,20 +59,27 @@ public class ClockScreenService extends Service {
     private BroadcastReceiver mAmPmCheckReceiver;
     private BroadcastReceiver mAlarmChangedReceiver;
 
+    private PendingIntent triggerUpdateIntent;
+
     private static int CURRENT_LAYOUT = 0;
     private long mScreenOffTimestamp = -1;
 
+    public ClockScreenService(){
+        Log.wtf(TAG, "ClockScreenService");
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.wtf(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
-        Log.d(TAG, "onStartCommand");
-
+//
         mSharedPreferences = getSharedPreferences(FAIRPHONE_CLOCK_PREFERENCES, MODE_PRIVATE);
         startYourFairphoneSinceCounter();
         setupLayoutRotateReceiver();
         setupShareReceiver();
         setupBatterySaverReceiver();
         setupLockReceiver();
+        setupAMPMManager();
         setupAMPMReceiver();
         setupAlarmChangeReceiver();
         setupTimeChangedReceiver();
@@ -74,9 +87,33 @@ public class ClockScreenService extends Service {
         return START_STICKY;
     }
 
+    private PendingIntent getUpdateIntent() {
+        if(triggerUpdateIntent == null) {
+            Intent intent = new Intent(ACTION_CLOCK_UPDATE);
+            triggerUpdateIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        }
+        return triggerUpdateIntent;
+    }
+
+    private void setupAMPMManager() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.add(Calendar.MINUTE, 60 - calendar.get(Calendar.MINUTE));
+        calendar.add(Calendar.SECOND, 60 - calendar.get(Calendar.SECOND));
+        AlarmManager alarmManager = (AlarmManager) this
+                .getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 3600000, getUpdateIntent());
+    }
+
 	@Override
 	public void onDestroy() {
+        Log.wtf(TAG, "onDestroy");
 		super.onDestroy();
+
+        if ( triggerUpdateIntent != null ) {
+            AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            alarmManager.cancel(getUpdateIntent());
+        }
 		if (mAlarmChangedReceiver != null) {
 			unregisterReceiver(mAlarmChangedReceiver);
 			mAlarmChangedReceiver = null;
@@ -104,7 +141,7 @@ public class ClockScreenService extends Service {
 					updateWidget();
 				}
 			};
-			registerReceiver(mAmPmCheckReceiver, new IntentFilter(ClockWidget.CLOCK_AM_PM_UPDATE));
+			registerReceiver(mAmPmCheckReceiver, new IntentFilter(ACTION_CLOCK_UPDATE));
 		}
 	}
 
