@@ -49,11 +49,12 @@ public class ClockScreenService extends Service {
     public static final String PREFERENCE_BATTERY_TIME_UNTIL_CHARGED = "com.fairphone.clock.PREFERENCE_BATTERY_TIME_UNTIL_CHARGED";
     public static final long MINUTES_IN_MILIS = 60000L;
 
+    private SharedPreferences mSharedPreferences;
+
     private BroadcastReceiver mRotateReceiver;
     private BroadcastReceiver mShareReceiver;
     private BroadcastReceiver mBatterySaverReceiver;
     private BroadcastReceiver mBatteryStatsReceiver;
-    private SharedPreferences mSharedPreferences;
     private BroadcastReceiver mLockReceiver;
     private BroadcastReceiver mTimeChangedReceiver;
     private BroadcastReceiver mAmPmCheckReceiver;
@@ -72,8 +73,8 @@ public class ClockScreenService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.wtf(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
-//
         mSharedPreferences = getSharedPreferences(FAIRPHONE_CLOCK_PREFERENCES, MODE_PRIVATE);
+
         startYourFairphoneSinceCounter();
         setupLayoutRotateReceiver();
         setupShareReceiver();
@@ -105,19 +106,26 @@ public class ClockScreenService extends Service {
         alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 3600000, getUpdateIntent());
     }
 
-	@Override
-	public void onDestroy() {
-        Log.wtf(TAG, "onDestroy");
-		super.onDestroy();
-
+    private void clearAMPMManager() {
         if ( triggerUpdateIntent != null ) {
             AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
             alarmManager.cancel(getUpdateIntent());
         }
-		if (mAlarmChangedReceiver != null) {
-			unregisterReceiver(mAlarmChangedReceiver);
-			mAlarmChangedReceiver = null;
-		}
+    }
+
+    @Override
+	public void onDestroy() {
+        Log.wtf(TAG, "onDestroy");
+		super.onDestroy();
+
+        clearLayoutRotateReceiver();
+        clearShareReceiver();
+        clearBatterySaverReceiver();
+        clearLockReceiver();
+        clearAMPMManager();
+        clearAMPMReceiver();
+        clearAlarmChangeReceiver();
+        clearTimeChangedReceiver();
 	}
 
     @Override
@@ -145,6 +153,13 @@ public class ClockScreenService extends Service {
 		}
 	}
 
+    private void clearAMPMReceiver() {
+        if ( mAmPmCheckReceiver != null ) {
+            unregisterReceiver(mAmPmCheckReceiver);
+            mAmPmCheckReceiver = null;
+        }
+    }
+
     private void setupTimeChangedReceiver() {
         if (mTimeChangedReceiver == null) {
             mTimeChangedReceiver = new BroadcastReceiver() {
@@ -162,6 +177,13 @@ public class ClockScreenService extends Service {
         }
     }
 
+    private void clearTimeChangedReceiver() {
+        if ( mTimeChangedReceiver != null ) {
+            unregisterReceiver(mTimeChangedReceiver);
+            mTimeChangedReceiver = null;
+        }
+    }
+
 	private void setupAlarmChangeReceiver() {
 		if (mAlarmChangedReceiver == null) {
 			mAlarmChangedReceiver = new BroadcastReceiver() {
@@ -176,6 +198,13 @@ public class ClockScreenService extends Service {
 		}
 	}
 
+    private void clearAlarmChangeReceiver() {
+        if ( mAlarmChangedReceiver != null ) {
+            unregisterReceiver(mAlarmChangedReceiver);
+            mAlarmChangedReceiver = null;
+        }
+    }
+
 	private void setupLayoutRotateReceiver() {
 		if (mRotateReceiver == null) {
 			mRotateReceiver = new BroadcastReceiver() {
@@ -188,6 +217,13 @@ public class ClockScreenService extends Service {
 			registerReceiver(mRotateReceiver, new IntentFilter(ACTION_ROTATE_VIEW));
 		}
 	}
+
+    private void clearLayoutRotateReceiver() {
+        if ( mRotateReceiver != null ) {
+            unregisterReceiver(mRotateReceiver);
+            mRotateReceiver = null;
+        }
+    }
 
 	private void getNextActiveLayout() {
 		CURRENT_LAYOUT++;
@@ -223,6 +259,17 @@ public class ClockScreenService extends Service {
 		}
 	}
 
+    private void clearBatterySaverReceiver() {
+        if ( mBatterySaverReceiver != null ) {
+            unregisterReceiver(mBatterySaverReceiver);
+            mBatterySaverReceiver = null;
+        }
+        if ( mBatteryStatsReceiver != null ) {
+            unregisterReceiver(mBatteryStatsReceiver);
+            mBatteryStatsReceiver = null;
+        }
+    }
+
 
 	private void saveIntPreference(String preference, int value) {
 		SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -252,6 +299,13 @@ public class ClockScreenService extends Service {
             };
             registerReceiver(mLockReceiver, new IntentFilter(Intent.ACTION_SCREEN_OFF));
             registerReceiver(mLockReceiver, new IntentFilter(Intent.ACTION_SCREEN_ON));
+        }
+    }
+
+    private void clearLockReceiver() {
+        if ( mLockReceiver != null ) {
+            unregisterReceiver(mLockReceiver);
+            mLockReceiver = null;
         }
     }
 
@@ -331,6 +385,13 @@ public class ClockScreenService extends Service {
                 }
             };
             registerReceiver(mShareReceiver, new IntentFilter(ACTION_SHARE));
+        }
+    }
+
+    private void clearShareReceiver() {
+        if ( mShareReceiver != null ) {
+            unregisterReceiver(mShareReceiver);
+            mShareReceiver = null;
         }
     }
 
