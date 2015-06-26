@@ -285,7 +285,7 @@ public class ClockWidget extends AppWidgetProvider {
             widget.setTextViewText(R.id.battery_description, isCharging ? resources.getString(R.string.battery_will_be_charged_in) : resources.getString(R.string.battery_charge_will_last));
             Period remaining = new Period(currentTime.getMillis(), endtime.getMillis());
             int diffMonthDays = ((remaining.getWeeks() * 7) + remaining.getDays());
-            widget.setTextViewText(R.id.battery_days_left, String.format("%d %s", (diffMonthDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days))));
+            widget.setTextViewText(R.id.battery_days_left, String.format("%d %s", diffMonthDays, (diffMonthDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days))));
             widget.setViewVisibility(R.id.battery_time_group, View.GONE);
             widget.setViewVisibility(R.id.battery_days_left, View.VISIBLE);
         }

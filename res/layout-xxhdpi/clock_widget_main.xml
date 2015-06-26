@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="180dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/alarm_text"
+        style="@style/text_regular_21sp_spacing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="31.33dp"
+        android:drawableLeft="@drawable/alarm_icon"
+        android:drawablePadding="4dp"
+        android:gravity="left"
+        android:textAllCaps="true"
+        android:textSize="21.33sp"
+        android:visibility="invisible" />
+
+    <LinearLayout
+        android:id="@+id/hour_container"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginLeft="31.33dp"
+        android:layout_marginTop="10.67dp"
+        android:orientation="horizontal">
+
+        <TextClock
+            style="@style/text_thin_93sp_spacing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:format12Hour="@string/big_clock_12_hours_format"
+            android:format24Hour="@string/big_clock_24_hours_format"
+            android:gravity="left"
+            android:includeFontPadding="false"
+            android:textSize="93.33sp" />
+
+        <TextView
+            android:id="@+id/ampm_text"
+            style="@style/text_thin_53sp_spacing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:gravity="left"
+            android:includeFontPadding="false"
+            android:textSize="53.33sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="86.67dp"
+        android:layout_marginLeft="31.33dp"
+        android:layout_marginTop="93.33dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextClock
+            style="@style/text_regular_bold_67sp"
+            android:layout_width="84dp"
+            android:layout_height="86dp"
+            android:format12Hour="@string/day_number_format"
+            android:format24Hour="@string/day_number_format"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:textSize="73.33sp" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="6.67dp"
+            android:orientation="vertical">
+
+            <TextClock
+                style="@style/text_regular_bold_34sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:format12Hour="@string/day_name_format"
+                android:format24Hour="@string/day_name_format"
+                android:gravity="left"
+                android:includeFontPadding="false"
+                android:textSize="30sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="49dp"
+                android:orientation="horizontal">
+
+                <TextClock
+                    style="@style/text_medium_20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:format12Hour="@string/month_format"
+                    android:format24Hour="@string/month_format"
+                    android:gravity="left"
+                    android:includeFontPadding="false"
+                    android:textSize="20sp" />
+
+                <TextClock
+                    style="@style/text_light_20sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:format12Hour="@string/year_format"
+                    android:format24Hour="@string/year_format"
+                    android:gravity="left"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="@dimen/clock_padding"
+                    android:textAllCaps="true"
+                    android:textSize="20sp" />
+            </LinearLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</RelativeLayout>
