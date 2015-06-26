@@ -265,9 +265,9 @@ public class ClockWidget extends AppWidgetProvider {
 
         Log.d(TAG, "\ncurrentTime" + currentTime.toString() + "\nendTime: " + endtime.toString() + "\nRemaining time: " + PeriodFormat.getDefault().withLocale(Locale.getDefault()).print(new Period(remainingTime)));
         if (endtime.getDayOfMonth() <= currentTime.getDayOfMonth() + 1) {
-            if(endtime.getDayOfMonth() != currentTime.getDayOfMonth()){
+            if (endtime.getDayOfMonth() != currentTime.getDayOfMonth()) {
                 widget.setViewVisibility(R.id.day_indicator, View.VISIBLE);
-            }else{
+            } else {
                 widget.setViewVisibility(R.id.day_indicator, View.INVISIBLE);
             }
             widget.setTextViewText(R.id.battery_description, isCharging ? resources.getString(R.string.battery_will_be_charged_at) : resources.getString(R.string.battery_charge_will_last_until));
@@ -278,14 +278,14 @@ public class ClockWidget extends AppWidgetProvider {
                 widget.setTextViewText(R.id.battery_am_pm_indicator, "");
             } else {
                 widget.setTextViewText(R.id.hours_text, String.format("%d", endtime.property(DateTimeFieldType.clockhourOfHalfday()).get()));
-                widget.setTextViewText(R.id.battery_am_pm_indicator, endtime.property(DateTimeFieldType.halfdayOfDay()).get() == 0 ? "AM" : "PM");
+                widget.setTextViewText(R.id.battery_am_pm_indicator, endtime.property(DateTimeFieldType.halfdayOfDay()).get() == 0 ? resources.getString(R.string.time_am_default) : resources.getString(R.string.time_pm_default));
             }
             widget.setTextViewText(R.id.minutes_text, String.format("%02d", endtime.getMinuteOfHour()));
         } else {
             widget.setTextViewText(R.id.battery_description, isCharging ? resources.getString(R.string.battery_will_be_charged_in) : resources.getString(R.string.battery_charge_will_last));
             Period remaining = new Period(currentTime.getMillis(), endtime.getMillis());
             int diffMonthDays = ((remaining.getWeeks() * 7) + remaining.getDays());
-            widget.setTextViewText(R.id.battery_days_left, String.format("%d %s", diffMonthDays, resources.getString(R.string.days)));
+            widget.setTextViewText(R.id.battery_days_left, String.format("%d %s", (diffMonthDays == 1 ? resources.getString(R.string.day) : resources.getString(R.string.days))));
             widget.setViewVisibility(R.id.battery_time_group, View.GONE);
             widget.setViewVisibility(R.id.battery_days_left, View.VISIBLE);
         }
