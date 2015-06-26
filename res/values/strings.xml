@@ -41,5 +41,6 @@
     <string name="battery_charge_will_last">Battery charge will last</string>
     <string name="battery_will_be_charged_in">Battery will be charged in</string>
     <string name="unplug_your_charger">Unplug your charger</string>
+    <string name="tomorrow">tomorrow</string>
 
 </resources>
