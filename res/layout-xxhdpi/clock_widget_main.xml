@@ -81,6 +81,7 @@
                 android:format12Hour="@string/day_name_format"
                 android:format24Hour="@string/day_name_format"
                 android:gravity="left"
+                android:singleLine="true"
                 android:includeFontPadding="false"
                 android:textSize="30sp" />
 
