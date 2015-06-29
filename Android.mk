@@ -19,7 +19,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_STATIC_JAVA_LIBRARIES := android-common android-support-v4 fpclockjodatime
+LOCAL_STATIC_JAVA_LIBRARIES := android-common android-support-v4 fpclockjodatime fpclockjodaconvert
 
 LOCAL_SRC_FILES := $(call all-java-files-under, src) $(call all-renderscript-files-under, src)
 LOCAL_SDK_VERSION := current
@@ -27,13 +27,15 @@ LOCAL_SDK_VERSION := current
 LOCAL_PACKAGE_NAME := ClockWidget
 LOCAL_CERTIFICATE := platform
 
+LOCAL_PROGUARD_FLAG_FILES := proguard.flags
+
 LOCAL_PRIVILEGED_MODULE := true
 
 include $(BUILD_PACKAGE)
 
 include $(CLEAR_VARS)
 
-LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := fpclockjodatime:libs/joda-time-2.8.1.jar
+LOCAL_PREBUILT_STATIC_JAVA_LIBRARIES := fpclockjodatime:libs/joda-time-2.8.1.jar fpclockjodaconvert:libs/joda-convert-1.4.jar
 
 include $(BUILD_MULTI_PREBUILT)
 
