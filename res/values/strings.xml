@@ -11,6 +11,7 @@
     <string name="alarm_clock_24h_format" translatable="false">EEE, kk:mm</string>
     <string name="time_am_default" translatable="false">AM</string>
     <string name="time_pm_default" translatable="false">PM</string>
+    <string name="colon" translate="false">:</string>
 
 
     <string name="you_been_in_peace_for">You\'ve been in\npeace of mind for</string>

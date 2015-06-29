@@ -31,8 +31,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:includeFontPadding="false"
-            android:paddingRight="3dp"
-            android:text="02" />
+            android:paddingRight="3dp" />
 
         <TextView
             android:id="@+id/years_text"
@@ -62,8 +61,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:includeFontPadding="false"
-            android:paddingRight="3dp"
-            android:text="07" />
+            android:paddingRight="3dp" />
 
         <TextView
             android:id="@+id/months_text"
@@ -93,8 +91,7 @@
             android:layout_height="wrap_content"
             android:gravity="left"
             android:includeFontPadding="false"
-            android:paddingRight="3dp"
-            android:text="15" />
+            android:paddingRight="3dp" />
 
         <TextView
             android:id="@+id/days_text"

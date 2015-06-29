@@ -68,8 +68,7 @@
                 style="@style/text_condensed_bold_67sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="17" />
+                android:gravity="left" />
 
             <TextView
                 style="@style/text_light_67sp"
@@ -78,15 +77,14 @@
                 android:gravity="left"
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
-                android:text=":" />
+                android:text="@string/colon" />
 
             <TextView
                 android:id="@+id/minutes_text"
                 style="@style/text_condensed_bold_67sp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="left"
-                android:text="25" />
+                android:gravity="left" />
 
             <LinearLayout
                 android:layout_width="match_parent"
