@@ -6,7 +6,7 @@
     <string name="month_format" translatable="false">MMMM</string>
     <string name="year_format" translatable="false">yyyy</string>
     <string name="day_name_format" translatable="false">EEEE</string>
-    <string name="day_number_format" translatable="false">d</string>
+    <string name="day_number_format" translatable="false">dd</string>
     <string name="alarm_clock_12h_format" translatable="false">EEE, h:mm</string>
     <string name="alarm_clock_24h_format" translatable="false">EEE, kk:mm</string>
     <string name="time_am_default" translatable="false">AM</string>
