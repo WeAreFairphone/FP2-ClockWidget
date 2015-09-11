@@ -4,16 +4,6 @@
               android:layout_height="180dp">
 
     <include layout="@layout/clock_widget_main"
-             android:id="@+id/clock_widget_main"
-             android:visibility="gone"/>
-    <include layout="@layout/clock_widget_battery"
-             android:id="@+id/clock_widget_battery"
-             android:visibility="gone"/>
-    <include layout="@layout/clock_widget_peace_of_mind"
-             android:id="@+id/clock_widget_peace_of_mind"
-             android:visibility="gone"/>
-    <include layout="@layout/clock_widget_yours_since"
-             android:id="@+id/clock_widget_yours_since"
-             android:visibility="gone"/>
+             android:id="@+id/clock_widget_main"/>
 
 </LinearLayout>

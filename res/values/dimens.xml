@@ -18,6 +18,10 @@
     <dimen name="text_size_37sp">37sp</dimen>
     <dimen name="clock_padding">8dp</dimen>
     <dimen name="text_size_56sp">56sp</dimen>
+    <dimen name="text_size_48sp">48sp</dimen>
+    <dimen name="text_size_102sp">102sp</dimen>
+    <dimen name="text_size_22sp">22sp</dimen>
+    <dimen name="text_size_90sp">90sp</dimen>
 
 
 

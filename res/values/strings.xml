@@ -1,47 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <resources>
+
     <string name="app_name">Clock widget</string>
-    <string name="big_clock_12_hours_format" translatable="false">h:mm</string>
-    <string name="big_clock_24_hours_format" translatable="false">kk:mm</string>
-    <string name="month_format" translatable="false">MMMM</string>
-    <string name="year_format" translatable="false">yyyy</string>
-    <string name="day_name_format" translatable="false">EEEE</string>
-    <string name="day_number_format" translatable="false">dd</string>
-    <string name="alarm_clock_12h_format" translatable="false">EEE, h:mm</string>
-    <string name="alarm_clock_24h_format" translatable="false">EEE, kk:mm</string>
-    <string name="time_am_default" translatable="false">AM</string>
-    <string name="time_pm_default" translatable="false">PM</string>
-    <string name="colon" translate="false">:</string>
-
-
-    <string name="you_been_in_peace_for">You\'ve been in\npeace of mind for</string>
-    <string name="your_record_peace_of_mind">Your record\npeace of mind was</string>
-    <string name="minutes">minutes</string>
-    <string name="share">share</string>
-    <string name="battery_charge_will_last_until">Battery charge will last until</string>
-    <string name="battery_will_be_charged_at">Battery will be charged at</string>
-    <string name="battery_is_fully">Battery charge complete</string>
-    <string name="make_it_last_longer">Make it last longer</string>
-    <string name="your_fairphone_for">Your Fairphone for</string>
-    <string name="years">years</string>
-    <string name="months">months</string>
-    <string name="days">days</string>
-    <string name="charged">charged</string>
-    <string name="year">year</string>
-    <string name="month">month</string>
-    <string name="day">day</string>
-    <string name="hours">hours</string>
-    <string name="hour">hour</string>
-    <string name="weeks">weeks</string>
-    <string name="week">week</string>
-    <string name="been_in_peace_for">I\'ve been in peace of mind for</string>
-    <string name="peace_record_text">A new personal best!</string>
-    <string name="my_fairphone_is">My Fairphone is</string>
-    <string name="old">old!</string>
-    <string name="share_to">Share to</string>
-    <string name="battery_charge_will_last">Battery charge will last</string>
-    <string name="battery_will_be_charged_in">Battery will be charged in</string>
-    <string name="unplug_your_charger">Unplug your charger</string>
-    <string name="tomorrow">tomorrow</string>
+    <string name="edit">edit</string>
 
 </resources>

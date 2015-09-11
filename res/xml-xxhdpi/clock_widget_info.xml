@@ -4,7 +4,7 @@
     android:minHeight="180dp"
     android:minWidth="304dp"
     android:minResizeHeight="130dp"
-    android:previewImage="@mipmap/ic_clock_launcher"
+    android:previewImage="@drawable/widget_clock_icon"
     android:resizeMode="none"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard">

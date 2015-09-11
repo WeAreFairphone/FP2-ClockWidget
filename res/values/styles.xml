@@ -104,6 +104,24 @@
         <item name="android:letterSpacing">-0.01</item>
     </style>
 
+    <style name="text_white_102sp">
+        <item name="android:textSize">@dimen/text_size_102sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="text_thin_102sp" parent="text_white_102sp">
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="text_white_90sp">
+        <item name="android:textSize">@dimen/text_size_90sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="text_thin_90sp" parent="text_white_90sp">
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
     <style name="text_white_53sp">
         <item name="android:textSize">@dimen/text_size_53sp</item>
         <item name="android:textColor">@color/white</item>
@@ -147,6 +165,7 @@
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
 
+
     <style name="text_white_34sp">
         <item name="android:textSize">@dimen/text_size_34sp</item>
         <item name="android:textColor">@color/white</item>
@@ -158,7 +177,33 @@
 
     <style name="text_regular_bold_34sp" parent="text_regular_34sp">
         <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_white_48sp">
+        <item name="android:textSize">@dimen/text_size_48sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="text_regular_48sp" parent="text_white_48sp">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="text_regular_bold_48sp" parent="text_regular_48sp">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_thin_34sp" parent="text_white_34sp">
+        <item name="android:fontFamily">sans-serif-thin</item>
+    </style>
+
+    <style name="text_condensed_34sp" parent="text_white_34sp">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="text_thin_34sp_spacing" parent="text_thin_34sp">
+        <item name="android:alpha">0.5</item>
         <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">-0.01</item>
     </style>
 
     <style name="text_white_67sp">
@@ -214,6 +259,23 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="text_medium_16sp" parent="text_white_16sp">
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <style name="text_regular_16sp" parent="text_white_16sp">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <style name="text_white_22sp">
+        <item name="android:textSize">@dimen/text_size_22sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="text_regular_22sp" parent="text_white_22sp">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
     <style name="text_white_14sp">
         <item name="android:textSize">@dimen/text_size_14sp</item>
         <item name="android:textColor">@color/white</item>
@@ -221,6 +283,14 @@
 
     <style name="text_light_16sp" parent="text_white_16sp">
         <item name="android:fontFamily">sans-serif-light</item>
+    </style>
+
+    <style name="text_regular_bold_16sp" parent="text_regular_16sp">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="text_regular_bold_22sp" parent="text_regular_22sp">
+        <item name="android:textStyle">bold</item>
     </style>
     <style name="text_light_14sp" parent="text_white_14sp">
         <item name="android:fontFamily">sans-serif-light</item>
@@ -258,7 +328,20 @@
         <item name="android:fontFamily">sans-serif-condensed</item>
     </style>
 
+    <style name="text_condensed_16sp" parent="text_white_16sp">
+        <item name="android:fontFamily">sans-serif-condensed</item>
+    </style>
+
+    <style name="text_regular_18sp" parent="text_white_18sp">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
     <style name="text_condensed_bold_italic_18sp" parent="text_condensed_18sp">
+        <item name="android:textStyle">bold|italic</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+    <style name="text_condensed_bold_italic_16sp" parent="text_condensed_16sp">
         <item name="android:textStyle">bold|italic</item>
         <item name="android:textAllCaps">true</item>
     </style>
