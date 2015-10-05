@@ -8,6 +8,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.provider.AlarmClock;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
@@ -67,7 +68,7 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private static void setupEditOnClick(Context context, RemoteViews widget) {
-        Intent launchIntent = Intent.makeMainActivity(new ComponentName("com.android.deskclock", "com.android.deskclock.DeskClock"));
+        Intent launchIntent = new Intent(AlarmClock.ACTION_SHOW_ALARMS);//Intent.makeMainActivity(new ComponentName("com.android.deskclock", "com.android.deskclock.DeskClock"));
         PendingIntent launchPendingIntent = PendingIntent.getActivity(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(R.id.clock_edit_button, launchPendingIntent);
     }
