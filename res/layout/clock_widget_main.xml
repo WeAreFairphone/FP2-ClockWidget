@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="vertical">
 
@@ -108,20 +108,17 @@
                 android:includeFontPadding="false" />
         </RelativeLayout>
 
-        <FrameLayout
+        <TextView
             android:id="@+id/clock_edit_button"
+            android:layout_marginLeft="-60dp"
+            android:layout_marginTop="9dp"
+            style="@style/text_condensed_bold_italic_18sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="-60dp"
-            android:layout_marginTop="9dp">
-            <TextView
-                style="@style/text_condensed_bold_italic_18sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/button_states_blue"
-                android:gravity="left"
-                android:padding="5dp"
-                android:text="@string/edit" />
-        </FrameLayout>
+            android:background="@drawable/button_states_blue"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:padding="5dp"
+            android:text="@string/edit" />
     </LinearLayout>
-</RelativeLayout>
+</merge>
