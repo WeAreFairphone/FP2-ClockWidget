@@ -68,7 +68,8 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private static void setupEditOnClick(Context context, RemoteViews widget) {
-        Intent launchIntent = new Intent(AlarmClock.ACTION_SHOW_ALARMS);//Intent.makeMainActivity(new ComponentName("com.android.deskclock", "com.android.deskclock.DeskClock"));
+        String intentAction = Build.VERSION.SDK_INT >= 19 ? AlarmClock.ACTION_SHOW_ALARMS : AlarmClock.ACTION_SET_ALARM;
+        Intent launchIntent = new Intent(intentAction);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(context, r.nextInt(), launchIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         widget.setOnClickPendingIntent(R.id.clock_edit_button, launchPendingIntent);
     }
