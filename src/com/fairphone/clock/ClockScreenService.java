@@ -34,12 +34,12 @@ public class ClockScreenService extends Service {
 
 
     public ClockScreenService(){
-        Log.wtf(TAG, "ClockScreenService");
+        Log.d(TAG, "ClockScreenService");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.wtf(TAG, "onStartCommand");
+        Log.d(TAG, "onStartCommand");
         super.onStartCommand(intent, flags, startId);
 
         setupAMPMManager();
@@ -78,7 +78,7 @@ public class ClockScreenService extends Service {
 
     @Override
 	public void onDestroy() {
-        Log.wtf(TAG, "onDestroy");
+        Log.d(TAG, "onDestroy");
 		super.onDestroy();
 
         clearAMPMManager();
@@ -149,7 +149,7 @@ public class ClockScreenService extends Service {
             mAlarmChangedReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    Log.wtf(TAG,"update widget");
+                    Log.d(TAG,"update widget");
                     updateWidget();
                 }
             };
@@ -174,7 +174,7 @@ public class ClockScreenService extends Service {
             mLocaleChangedReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    Log.wtf(TAG,"update widget");
+                    Log.d(TAG,"update widget");
                     updateWidget();
                 }
             };

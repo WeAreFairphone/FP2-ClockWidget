@@ -31,14 +31,14 @@ public class ClockWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        Log.wtf(TAG, "onEnabled");
+        Log.d(TAG, "onEnabled");
         super.onEnabled(context);
     }
 
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Log.wtf(TAG, "onUpdate");
+        Log.d(TAG, "onUpdate");
         super.onUpdate(context, appWidgetManager, appWidgetIds);
 
         context.startService(new Intent(context, ClockScreenService.class));
@@ -52,7 +52,7 @@ public class ClockWidget extends AppWidgetProvider {
 
     @Override
     public void onDisabled(Context context) {
-        Log.wtf(TAG, "onDisabled");
+        Log.d(TAG, "onDisabled");
         super.onDisabled(context);
         context.stopService(new Intent(context, ClockScreenService.class));
     }
