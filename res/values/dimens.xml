@@ -4,24 +4,24 @@
     <!-- Analog clock size in the the screen saver -->
     <dimen name="big_font_size">120dp</dimen>
     <dimen name="widget_big_font_size">106sp</dimen>
-    <dimen name="text_size_21sp">21sp</dimen>
-    <dimen name="text_size_93sp">93sp</dimen>
-    <dimen name="text_size_53sp">53sp</dimen>
-    <dimen name="text_size_20sp">20sp</dimen>
-    <dimen name="text_size_34sp">34sp</dimen>
-    <dimen name="text_size_67sp">67sp</dimen>
-    <dimen name="text_size_45sp">45sp</dimen>
-    <dimen name="text_size_16sp">16sp</dimen>
-    <dimen name="text_size_14sp">14sp</dimen>
-    <dimen name="text_size_27sp">27sp</dimen>
-    <dimen name="text_size_18sp">18sp</dimen>
-    <dimen name="text_size_37sp">37sp</dimen>
+    <dimen name="text_size_21sp">21dp</dimen>
+    <dimen name="text_size_93sp">93dp</dimen>
+    <dimen name="text_size_53sp">53dp</dimen>
+    <dimen name="text_size_20sp">20dp</dimen>
+    <dimen name="text_size_34sp">34dp</dimen>
+    <dimen name="text_size_67sp">67dp</dimen>
+    <dimen name="text_size_45sp">45dp</dimen>
+    <dimen name="text_size_16sp">16dp</dimen>
+    <dimen name="text_size_14sp">14dp</dimen>
+    <dimen name="text_size_27sp">27dp</dimen>
+    <dimen name="text_size_18sp">18dp</dimen>
+    <dimen name="text_size_37sp">37dp</dimen>
     <dimen name="clock_padding">8dp</dimen>
-    <dimen name="text_size_56sp">56sp</dimen>
-    <dimen name="text_size_48sp">48sp</dimen>
-    <dimen name="text_size_102sp">102sp</dimen>
-    <dimen name="text_size_22sp">22sp</dimen>
-    <dimen name="text_size_90sp">90sp</dimen>
+    <dimen name="text_size_56sp">56dp</dimen>
+    <dimen name="text_size_48sp">48dp</dimen>
+    <dimen name="text_size_102sp">102dp</dimen>
+    <dimen name="text_size_22sp">22dp</dimen>
+    <dimen name="text_size_90sp">90dp</dimen>
 
 
 

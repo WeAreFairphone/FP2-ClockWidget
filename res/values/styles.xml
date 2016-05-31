@@ -40,7 +40,7 @@
     <!-- Button styles -->
     <style name="SubTitle">
         <item name="android:textColor">@color/white</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">18dp</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">sans-serif</item>
         <item name="android:includeFontPadding">false</item>
@@ -61,12 +61,12 @@
     </style>
 
     <style name="big_thin">
-        <item name="android:textSize">106sp</item>
+        <item name="android:textSize">106dp</item>
         <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
     <style name="widget_big_thin" parent="big_thin">
-        <item name="android:textSize">106sp</item>
+        <item name="android:textSize">106dp</item>
     </style>
 
     <style name="label_widget">
