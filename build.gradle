@@ -6,7 +6,7 @@ buildscript {
         maven { url 'http://repo1.maven.org/maven2' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.0.0-alpha1'
+	    classpath 'com.android.tools.build:gradle:2.3.1'
     }
 }
 
@@ -21,13 +21,13 @@ allprojects {
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 25
+    buildToolsVersion '25.0.3'
 
     defaultConfig {
         applicationId "com.fairphone.clock"
         minSdkVersion 17
-        targetSdkVersion 21
+        targetSdkVersion 25
     }
 
     buildTypes {
@@ -65,5 +65,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:21.0.+'
+    compile 'com.android.support:support-v4:25.0.+'
+    compile 'org.joda:joda-convert:1.8.1'
+    compile 'joda-time:joda-time:2.9.9'
 }
