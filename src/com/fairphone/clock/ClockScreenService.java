@@ -23,7 +23,7 @@ public class ClockScreenService extends Service {
 
 	private static final String ACTION_ALARM_CHANGED = "android.app.action.NEXT_ALARM_CLOCK_CHANGED";
     private static final String ACTION_ALARM_CHANGED_V18 = "android.intent.action.ALARM_CHANGED";
-    private static final String ACTION_CLOCK_UPDATE = "com.fairphone.clock.widget.ClockWidget.CLOCK_UPDATE";
+    private static final String ACTION_CLOCK_UPDATE = "ClockWidget.CLOCK_UPDATE";
 
     private BroadcastReceiver mTimeChangedReceiver;
     private BroadcastReceiver mAmPmCheckReceiver;
