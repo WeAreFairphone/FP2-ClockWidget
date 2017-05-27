@@ -1,0 +1,5 @@
+# 2.0.1
+
+Clock widget has been moved to [this new package](https://fdroid.org/app/community.fairphone.clock) to avoid conflicts with the original app distributed by Fairphone with Fairphone OS and Fairphone Open OS.
+
+This app was originally developed by Fairphone for the Fairphone 2, but development stopped with the Marshmallow release of Fairphone OS. Then we, the WeAreFairphone community, took the source code and continued independent development.
