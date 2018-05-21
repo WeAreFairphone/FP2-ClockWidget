@@ -24,7 +24,7 @@
     <dimen name="text_size_90sp">90dp</dimen>
 
     <!-- Widget dimens -->
-    <dimen name="clock_widget_height">140dp</dimen>
+    <dimen name="clock_widget_height">120dp</dimen>
 
     <!-- Widget sizing best practices
          from https://developer.android.com/guide/practices/ui_guidelines/widget_design#design -->
