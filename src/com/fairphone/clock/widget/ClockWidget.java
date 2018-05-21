@@ -75,26 +75,20 @@ public class ClockWidget extends AppWidgetProvider {
     }
 
     private static void setClockAmPm(Context context, RemoteViews widget) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            if (DateFormat.is24HourFormat(context)) {
-                widget.setViewVisibility(R.id.ampm_text, View.GONE);
+        if (DateFormat.is24HourFormat(context)) {
+            widget.setViewVisibility(R.id.ampm_text, View.GONE);
+        } else {
+            widget.setViewVisibility(R.id.ampm_text, View.VISIBLE);
+            Calendar currentCalendar = Calendar.getInstance();
+
+            int hour = currentCalendar.get(Calendar.HOUR_OF_DAY);
+
+            if (hour < 12) {
+                widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_am_default));
             } else {
-                widget.setViewVisibility(R.id.ampm_text, View.VISIBLE);
-                Calendar currentCalendar = Calendar.getInstance();
-
-                int hour = currentCalendar.get(Calendar.HOUR_OF_DAY);
-
-                if (hour < 12) {
-                    widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_am_default));
-                } else {
-                    widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_pm_default));
-                }
+                widget.setTextViewText(R.id.ampm_text, context.getResources().getString(R.string.time_pm_default));
             }
         }
-        else{
-            widget.setViewVisibility(R.id.ampm_text, View.GONE);
-        }
-
     }
 
     private void setNextScheduledAlarm(Context context, RemoteViews widget) {
