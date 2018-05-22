@@ -1,0 +1,7 @@
+The <strong>Fairphone Clock Widget</strong> was the default clock in official Android 5 OSes for the Fairphone 2 smartphone, both Fairphone OS and Fairphone Open.
+
+It's just a regular clock widget. It doesn't include other Fairphone 2 goodies like battery estimation, "Your Fairphone for..." or Peace of Mind info, for the moment.
+
+Fairphone stopped the development of some Fairphone specific apps when the Fairphone 2 was updated to Android 6 "Marshmallow". Since they are open source, the WeAreFairphone community make them available for those users who want to keep the original Fairphone experience.
+
+You may want to take a look at Fairphone's <a href="https://f-droid.org/packages/community.fairphone.mycontacts">Recent Contacts</a> widget and <a href="https://f-droid.org/packages/community.fairphone.fplauncher3/">Fairphone Launcher 3</a> too.

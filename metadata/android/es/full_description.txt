@@ -1,0 +1,7 @@
+El <strong><em>Widget</em> reloj de Fairphone</strong> venía por defecto en los dos sistemas operativos Android 5 oficiales para el smartphone Fairphone 2 (Fairphone OS y Fairphone Open)
+
+Es un <em>widget</em> de reloj corriente. Por el momento no incluye otras funcionalidades del Fairphone 2 como la estimación de batería, desde hace cuánto tiempo tienes tu Fairphone ni la información de <em>Peace of Mind</em>.
+
+Fairphone paró de desarrollar algunas aplicaciones específicas como esta cuando lanzó Android 6 «Marshmallow» para el Fairphone 2. Como son de código abierto, la comunidad WeAreFairphone las pone a disposición de los usuarios que quieran mantener la experiencia original del Fairphone.
+
+Quizá quieras instalar también el <em>widget</em> <a href="https://f-droid.org/packages/community.fairphone.mycontacts">Contactos recientes</a> y el <a href="https://f-droid.org/packages/community.fairphone.fplauncher3/">lanzador de aplicaciones</a> originales de Fairphone.
