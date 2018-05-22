@@ -1,4 +1,4 @@
-package com.fairphone.clock;
+package community.fairphone.clock;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -13,7 +13,7 @@ import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.fairphone.clock.widget.ClockWidget;
+import community.fairphone.clock.widget.ClockWidget;
 
 import java.util.Calendar;
 
@@ -23,7 +23,7 @@ public class ClockScreenService extends Service {
 
 	private static final String ACTION_ALARM_CHANGED = "android.app.action.NEXT_ALARM_CLOCK_CHANGED";
     private static final String ACTION_ALARM_CHANGED_V18 = "android.intent.action.ALARM_CHANGED";
-    private static final String ACTION_CLOCK_UPDATE = "com.fairphone.clock.widget.ClockWidget.CLOCK_AM_PM_UPDATE";
+    private static final String ACTION_CLOCK_UPDATE = "community.fairphone.clock.widget.ClockWidget.CLOCK_AM_PM_UPDATE";
 
     private BroadcastReceiver mTimeChangedReceiver;
     private BroadcastReceiver mAmPmCheckReceiver;

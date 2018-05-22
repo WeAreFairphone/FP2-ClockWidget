@@ -1,4 +1,4 @@
-package com.fairphone.clock;
+package community.fairphone.clock;
 
 import android.app.Activity;
 import android.os.Bundle;
