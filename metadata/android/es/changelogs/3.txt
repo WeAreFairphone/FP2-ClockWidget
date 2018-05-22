@@ -1,0 +1,7 @@
+Arreglo:
+* Muestra corretamente la hora en formato de 12 horas en función de la preferencia del sistema «Usar formato de 24 horas»
+
+Nuevo:
+* El widget ahora encaja en solo 2 filas y 4 columnas en la mayoría de casos
+* Compatibilidad con interfaces derecha-a-izquierda
+* Traducción al japonés (@naofum)

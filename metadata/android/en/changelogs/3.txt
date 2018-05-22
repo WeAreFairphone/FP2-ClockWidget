@@ -1,0 +1,7 @@
+Fix:
+* Correctly display 12-hour format time depending on the 24-hour system preference
+
+New:
+* Widget now fits in just 2 rows and 4 columns whenever possible
+* Compatibility with right-to-left layouts
+* Japanese translation (@naofum)
